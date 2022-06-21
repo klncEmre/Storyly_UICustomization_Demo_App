@@ -13,6 +13,7 @@
 		BC981E7D2861B3FA006B2D2E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BC981E7B2861B3FA006B2D2E /* Main.storyboard */; };
 		BC981E7F2861B3FC006B2D2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BC981E7E2861B3FC006B2D2E /* Assets.xcassets */; };
 		BC981E822861B3FC006B2D2E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BC981E802861B3FC006B2D2E /* LaunchScreen.storyboard */; };
+		BC981E8B2861B432006B2D2E /* Storyly in Frameworks */ = {isa = PBXBuildFile; productRef = BC981E8A2861B432006B2D2E /* Storyly */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC981E8B2861B432006B2D2E /* Storyly in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +85,9 @@
 			dependencies = (
 			);
 			name = Storyly_UICustomization_Demo_App;
+			packageProductDependencies = (
+				BC981E8A2861B432006B2D2E /* Storyly */,
+			);
 			productName = Storyly_UICustomization_Demo_App;
 			productReference = BC981E722861B3FA006B2D2E /* Storyly_UICustomization_Demo_App.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +116,9 @@
 				Base,
 			);
 			mainGroup = BC981E692861B3FA006B2D2E;
+			packageReferences = (
+				BC981E892861B432006B2D2E /* XCRemoteSwiftPackageReference "storyly-ios" */,
+			);
 			productRefGroup = BC981E732861B3FA006B2D2E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -356,6 +364,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		BC981E892861B432006B2D2E /* XCRemoteSwiftPackageReference "storyly-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Netvent/storyly-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		BC981E8A2861B432006B2D2E /* Storyly */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BC981E892861B432006B2D2E /* XCRemoteSwiftPackageReference "storyly-ios" */;
+			productName = Storyly;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BC981E6A2861B3FA006B2D2E /* Project object */;
 }
