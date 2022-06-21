@@ -16,27 +16,21 @@ class ViewController: UIViewController {
     let STORYLY_INSTANCE_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NfaWQiOjc2MCwiYXBwX2lkIjo0MDUsImluc19pZCI6NDA0fQ.1AkqOy_lsiownTBNhVOUKc91uc9fDcAxfQZtpm3nj40"
     let scrollView = UIScrollView()
     let contentView = UIView()
+    
+//    Story Group Text Styling
+   
+    var storyGroupTextIsVisible = true
+    @IBOutlet weak var textVisibleButton: UIButton!
+    
+//    var storyGroupTextColor
+//    var storyGroupTextFont
+//    var storyGroupTextLines
+    
+    
+    
     @IBOutlet weak var viewsContainer: UIView!
     
-    let titleLabel: UILabel = {
-            let label = UILabel()
-            label.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-            label.numberOfLines = 0
-            label.sizeToFit()
-            label.textColor = UIColor.black
-            label.translatesAutoresizingMaskIntoConstraints = false
-            return label
-        }()
-        
-        let subtitleLabel: UILabel = {
-            let label = UILabel()
-            label.text = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
-            label.numberOfLines = 0
-            label.sizeToFit()
-            label.textColor = UIColor.black
-            label.translatesAutoresizingMaskIntoConstraints = false
-            return label
-        }()
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         //default
@@ -48,15 +42,31 @@ class ViewController: UIViewController {
         customizedView.storylyInit = StorylyInit(storylyId: STORYLY_INSTANCE_TOKEN)
         customizedView.rootViewController = self
         customizedView.delegate = self
-        setupScrollView()
-        setupCustoms()
+//        setupScrollView()
+//        setUpTextStyling()
+        
+        }
+    
+    @IBAction func resetButtonAction(_ sender: Any) {
+        
     }
+    @IBAction func textVisibilityChange(_ sender: Any) {
+        if(storyGroupTextIsVisible){
+            storyGroupTextIsVisible = false
+            textVisibleButton.setImage(UIImage(systemName: "circle",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black), for: UIControl.State.normal)
+        }
+        else{
+            storyGroupTextIsVisible = true
+            textVisibleButton.setImage(UIImage(systemName: "circle.inset.filled",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black), for: UIControl.State.normal)
+        }
+    }
+    
     func setupScrollView(){
            scrollView.translatesAutoresizingMaskIntoConstraints = false
            contentView.translatesAutoresizingMaskIntoConstraints = false
+            
            view.addSubview(scrollView)
            scrollView.addSubview(contentView)
-           
            scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
            scrollView.topAnchor.constraint(equalTo: viewsContainer.bottomAnchor ).isActive = true
@@ -66,8 +76,30 @@ class ViewController: UIViewController {
            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+        
+        
+        
     }
     func setupCustoms(){
+            let titleLabel: UILabel = {
+                let label = UILabel()
+                label.text = "."
+                label.numberOfLines = 0
+                label.sizeToFit()
+                label.textColor = UIColor.black
+                label.translatesAutoresizingMaskIntoConstraints = false
+                return label
+            }()
+            
+            let subtitleLabel: UILabel = {
+                let label = UILabel()
+                label.text = "?"
+                label.numberOfLines = 0
+                label.sizeToFit()
+                label.textColor = UIColor.black
+                label.translatesAutoresizingMaskIntoConstraints = false
+                return label
+            }()
            contentView.addSubview(titleLabel)
            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
@@ -79,6 +111,49 @@ class ViewController: UIViewController {
            subtitleLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 3/4).isActive = true
            subtitleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
        }
+    func setUpTextStyling() {
+        
+        lazy var titleLabel: UILabel = {
+            let label = UILabel()
+            label.text = "storyGroupTextIsVisible"
+            label.numberOfLines = 0
+            label.sizeToFit()
+            label.textColor = UIColor.black
+            label.translatesAutoresizingMaskIntoConstraints = false
+            return label
+        }()
+        lazy var button: UIButton! = {
+            
+            let button = UIButton()
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.backgroundColor = UIColor.systemBlue
+            button.setTitleColor(.red, for: .normal)
+            button.addTarget(self, action: #selector(didTaped(_:)), for: .touchUpInside)
+            button.tag = 1
+            button.layer.cornerRadius = 20
+            button.layer.borderWidth = 1
+            button.layer.borderColor = UIColor.black.cgColor
+            
+            return button
+          }()
+        
+    
+        
+    }
+    
+    @objc func didTaped(_ sender: UIButton){
+        if(storyGroupTextIsVisible) {
+            storyGroupTextIsVisible = false
+        }
+        print("Pressed")
+    }
+   
+    
+    
+    @objc func pressed(_ sender: UIButton) {
+                   
+                    
+     }
 
 }
 
