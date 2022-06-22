@@ -22,8 +22,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var textVisibleButton: UIButton!
     @IBOutlet weak var textColorPicker: UIPickerView!
     @IBOutlet weak var fontPicker: UIPickerView!
+    @IBOutlet weak var lineNumberPicker: UIPickerView!
     let groupTextColorDict:[String:UIColor] = ["Black":UIColor.black,"Red":UIColor.red,"Orange":UIColor.orange,"Yellow":UIColor.yellow]
-    var groupTextFontDict: [String:UIFont] = ["System Font": UIFont.systemFont(ofSize: 12),"Bold System Font" : UIFont.boldSystemFont(ofSize: 12)]
+    let groupTextFontDict: [String:UIFont] = ["System Font": UIFont.systemFont(ofSize: 12),"Bold System Font" : UIFont.boldSystemFont(ofSize: 12)]
     var pickedColor = UIColor.black
     var lineNumber = 2
     var fontSize = 12
@@ -125,19 +126,23 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if(component == 0){
-            if(pickerView == fontPicker){
-                let values = Array(groupTextFontDict.values)
-                font = values[row]
-                self.customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible: self.storyGroupTextIsVisible, color: self.pickedColor, font: self.font, lines: self.lineNumber)
-                
-                
+        if(component == 0){//means I have one element in the row.(so it is not font size picker)
+            switch pickerView{
+                case fontPicker:
+                    let values = Array(groupTextFontDict.values)
+                    font = values[row]
+                    self.customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible: self.storyGroupTextIsVisible, color: self.pickedColor, font: self.font, lines: self.lineNumber)
+                    break
+                    
+                case textColorPicker:
+                    let values = Array(groupTextColorDict.values)
+                    pickedColor = values[row]
+                    self.customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible: self.storyGroupTextIsVisible, color: values[row], font: self.font, lines: self.lineNumber)
+                    break
+            default:
+                break
             }
-            else{
-                let values = Array(groupTextColorDict.values)
-                pickedColor = values[row]
-                self.customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible: self.storyGroupTextIsVisible, color: values[row], font: self.font, lines: self.lineNumber)
-            }
+           
         }
         else{
             fontSize = row + 1
