@@ -12,19 +12,18 @@ class ViewController: UIViewController {
     
 //    DEFAULT PICKER VIEW VALUES NEED TO BE UPDATED TO DEFAULT OF STORYLY.
     @IBOutlet weak var defaultView: StorylyView!
-    @IBOutlet weak var customizedView: StorylyView!
+    @IBOutlet weak var containerToCustom: UIView!
+    
+    var customizedView = StorylyView()
     let STORYLY_INSTANCE_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NfaWQiOjc2MCwiYXBwX2lkIjo0MDUsImluc19pZCI6NDA0fQ.1AkqOy_lsiownTBNhVOUKc91uc9fDcAxfQZtpm3nj40"
-    let scrollView = UIScrollView()
-    let contentView = UIView()
+
     
 //    Story Group Text Styling
     var storyGroupTextIsVisible = true
     @IBOutlet weak var textVisibleButton: UIButton!
     @IBOutlet weak var fontPicker: UIPickerView!
     @IBOutlet weak var lineNumberPicker: UIPickerView!
-    
     let groupTextFontDict: [String:UIFont] = ["System Font": UIFont.systemFont(ofSize: 12),"Bold System Font" : UIFont.boldSystemFont(ofSize: 12)]
-    
     var lineNumber = 2
     var fontSize = 12
     var font = UIFont.systemFont(ofSize: CGFloat(12))
@@ -36,22 +35,35 @@ class ViewController: UIViewController {
     var currentPropertyIndex = 0
     @IBOutlet weak var colorShowcase: UIView!
 
-    
-//seen - not seen system
-    @IBOutlet weak var seenColorStack: UIStackView!
+//Seen - Not seen system
+    @IBOutlet weak var seenColorView: UIView!
     @IBOutlet weak var notSeenColorView: UIView!
-    var colorsOfSeenState : [UIColor] = []
-    var colorsOfNotSeenSate: [UIColor] = []
+    var colorsOfSeenState : [Int:UIColor] = [:]
+    var colorsOfNotSeenSate: [Int:UIColor] = [:]
     var rgbValuesOfSeenState:[Int] = [0,0,0]
     var rgbValuesOfNotSeenState:[Int] = [0,0,0]
     @IBOutlet weak var viewsContainer: UIView!
     @IBOutlet weak var notSeenColorsLabel: UILabel!
+    @IBOutlet weak var seenColorsLabel: UILabel!
     @IBOutlet weak var stateColorPicker: UIPickerView!
     var coordinateKeeperNotSeen = 20.0
-    let sizeOfStack = 80
-    var availableIndexes = [0,1,2,3]
+    let widthOfStack = 80
+    var availableIndexesNotSeen = [0,2,4,6]
+    var availableIndexesSeen = [1,3,5,7]
     let colorsAndRGB = ["Red": [186,0,0],"Black":[1,0,0], "Yellow":[2,3,0]]
     var frontItem = "x"
+    var pickedSize = "L"
+    
+    
+//    Story Group Size element
+    @IBOutlet weak var smallButton: UIButton!
+    @IBOutlet weak var largeButton: UIButton!
+    @IBOutlet weak var customButton: UIButton!
+
+    @IBOutlet weak var heightTextF: UITextField!
+    @IBOutlet weak var widthTextF: UITextField!
+    @IBOutlet weak var cornerRadiusTextF: UITextField!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,10 +75,15 @@ class ViewController: UIViewController {
         customizedView.storylyInit = StorylyInit(storylyId: STORYLY_INSTANCE_TOKEN)
         customizedView.rootViewController = self
         customizedView.delegate = self
-        customizedView.storyGroupSize = "large"
-       
+        
+        containerToCustom.addSubview(customizedView)
+        customizedView.translatesAutoresizingMaskIntoConstraints = false
+        customizedView.heightAnchor.constraint(equalTo: containerToCustom.heightAnchor).isActive = true
+        customizedView.widthAnchor.constraint(equalTo: containerToCustom.widthAnchor).isActive = true
+        customizedView.centerXAnchor.constraint(equalTo: containerToCustom.centerXAnchor).isActive = true
+        customizedView.centerYAnchor.constraint(equalTo: containerToCustom.centerYAnchor).isActive = true
+        
         //Story Group Text Styling
-      
         fontPicker.delegate = self
         fontPicker.dataSource = self
         fontPicker.selectRow(11, inComponent: 1, animated: true)
@@ -86,6 +103,7 @@ class ViewController: UIViewController {
     
     @IBAction func resetButtonAction(_ sender: Any) {
 //        pickedC.text = backgroundField.text
+        print(heightTextF.text ?? "empty")
         
     }
     @IBAction func textVisibilityChange(_ sender: Any) {
@@ -104,57 +122,216 @@ class ViewController: UIViewController {
     }
     
     @IBAction func notSeenAddButton(_ sender: Any) {
-       
-        let myStak = UIView()
-        myStak.translatesAutoresizingMaskIntoConstraints = false
+        if(!availableIndexesNotSeen.isEmpty){
+            let myStak = UIView()
+            myStak.translatesAutoresizingMaskIntoConstraints = false
 
-        notSeenColorView.addSubview(myStak)
-        myStak.widthAnchor.constraint(equalToConstant: CGFloat(sizeOfStack)).isActive = true
-        myStak.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
-        myStak.leftAnchor.constraint(equalTo: notSeenColorsLabel.rightAnchor , constant: CGFloat(Double(sizeOfStack * availableIndexes[0]) * 1.1)).isActive = true
-        myStak.centerYAnchor.constraint(equalTo: notSeenColorsLabel.centerYAnchor).isActive = true
-    
-        let button = UIButton()
-        button.tag = availableIndexes[0]
-        button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
+            notSeenColorView.addSubview(myStak)
+            myStak.widthAnchor.constraint(equalToConstant: CGFloat(widthOfStack)).isActive = true
+            myStak.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
+            myStak.leftAnchor.constraint(equalTo: notSeenColorsLabel.rightAnchor , constant: CGFloat((Double(widthOfStack * availableIndexesNotSeen[0]) / 2.0) * 1.1)).isActive = true
+            myStak.centerYAnchor.constraint(equalTo: notSeenColorsLabel.centerYAnchor).isActive = true
         
-        button.setImage(UIImage.init(systemName: "clear.fill"), for: .normal)
+            let button = UIButton()
+            button.tag = availableIndexesNotSeen[0]
+            button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.setImage(UIImage.init(systemName: "clear.fill"), for: .normal)
 
-        lazy var myLabel: UILabel = {
-            let label = UILabel()
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.text = "(" + rgbValuesOfNotSeenState[0].description + ", " +  rgbValuesOfNotSeenState[1].description + ", " + rgbValuesOfNotSeenState[2].description + ")"
-            label.font = UIFont.systemFont(ofSize: 12)
-            return label
-        }()
-        myStak.layer.cornerRadius = 8
-        myStak.backgroundColor = UIColor.lightGray.withAlphaComponent(0.4)
-        myStak.addSubview(button)
-        myStak.addSubview(myLabel)
-        button.widthAnchor.constraint(equalToConstant: CGFloat(Double(sizeOfStack) * 0.4)).isActive = true
-        button.heightAnchor.constraint(equalToConstant: CGFloat(20)).isActive = true
-        button.centerYAnchor.constraint(equalTo: myStak.centerYAnchor).isActive = true
-        button.rightAnchor.constraint(equalTo: myStak.rightAnchor,constant: CGFloat(-3)).isActive = true
-        myLabel.translatesAutoresizingMaskIntoConstraints = false
-        myLabel.leftAnchor.constraint(equalTo: myStak.leftAnchor,constant: CGFloat(2)).isActive = true
-        myLabel.centerYAnchor.constraint(equalTo: myStak.centerYAnchor).isActive = true
-        
-        availableIndexes.remove(at: 0)
-        customizedView.storyGroupIconBorderColorNotSeen = colorsOfNotSeenSate
-        
+            lazy var myLabel: UILabel = {
+                let label = UILabel()
+                label.translatesAutoresizingMaskIntoConstraints = false
+                label.text = "(" + rgbValuesOfNotSeenState[0].description + ", " +  rgbValuesOfNotSeenState[1].description + ", " + rgbValuesOfNotSeenState[2].description + ")"
+                label.font = UIFont.systemFont(ofSize: 12)
+                return label
+            }()
+            myStak.layer.cornerRadius = 8
+            myStak.backgroundColor = UIColor.lightGray.withAlphaComponent(0.4)
+            myStak.addSubview(button)
+            myStak.addSubview(myLabel)
+            button.widthAnchor.constraint(equalToConstant: CGFloat(Double(widthOfStack) * 0.4)).isActive = true
+            button.heightAnchor.constraint(equalToConstant: CGFloat(20)).isActive = true
+            button.centerYAnchor.constraint(equalTo: myStak.centerYAnchor).isActive = true
+            button.rightAnchor.constraint(equalTo: myStak.rightAnchor,constant: CGFloat(-3)).isActive = true
+            myLabel.translatesAutoresizingMaskIntoConstraints = false
+            myLabel.leftAnchor.constraint(equalTo: myStak.leftAnchor,constant: CGFloat(2)).isActive = true
+            myLabel.centerYAnchor.constraint(equalTo: myStak.centerYAnchor).isActive = true
+            
+            
+            colorsOfNotSeenSate[availableIndexesNotSeen[0]] =  UIColor.init(red: CGFloat(rgbValuesOfNotSeenState[0])/255, green: CGFloat(rgbValuesOfNotSeenState[1])/255, blue: CGFloat(rgbValuesOfNotSeenState[2])/255, alpha: 1.0) //to fill the border colors dict
+            let val = Array(colorsOfNotSeenSate.values)
+            customizedView.storyGroupIconBorderColorNotSeen = val
+            availableIndexesNotSeen.remove(at: 0)
+        }
        
     }
     
     @IBAction func seenAddButton(_ sender: Any) {
+        if(!availableIndexesSeen.isEmpty){
+            let myStak = UIView()
+            myStak.translatesAutoresizingMaskIntoConstraints = false
+
+            seenColorView.addSubview(myStak)
+            myStak.widthAnchor.constraint(equalToConstant: CGFloat(widthOfStack)).isActive = true
+            myStak.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
+            myStak.leftAnchor.constraint(equalTo: seenColorsLabel.rightAnchor , constant: CGFloat((Double(widthOfStack * (availableIndexesSeen[0] - 1)) / 2.0) * 1.1)).isActive = true
+            myStak.centerYAnchor.constraint(equalTo: seenColorsLabel.centerYAnchor).isActive = true
+        
+            let button = UIButton()
+            button.tag = availableIndexesSeen[0]
+            button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            
+            button.setImage(UIImage.init(systemName: "clear.fill"), for: .normal)
+
+            lazy var myLabel: UILabel = {
+                let label = UILabel()
+                label.translatesAutoresizingMaskIntoConstraints = false
+                label.text = "(" + rgbValuesOfSeenState[0].description + ", " +  rgbValuesOfSeenState[1].description + ", " + rgbValuesOfSeenState[2].description + ")"
+                label.font = UIFont.systemFont(ofSize: 12)
+                return label
+            }()
+            myStak.layer.cornerRadius = 8
+            myStak.backgroundColor = UIColor.lightGray.withAlphaComponent(0.4)
+            myStak.addSubview(button)
+            myStak.addSubview(myLabel)
+            button.widthAnchor.constraint(equalToConstant: CGFloat(Double(widthOfStack) * 0.4)).isActive = true
+            button.heightAnchor.constraint(equalToConstant: CGFloat(20)).isActive = true
+            button.centerYAnchor.constraint(equalTo: myStak.centerYAnchor).isActive = true
+            button.rightAnchor.constraint(equalTo: myStak.rightAnchor,constant: CGFloat(-3)).isActive = true
+            myLabel.translatesAutoresizingMaskIntoConstraints = false
+            myLabel.leftAnchor.constraint(equalTo: myStak.leftAnchor,constant: CGFloat(2)).isActive = true
+            myLabel.centerYAnchor.constraint(equalTo: myStak.centerYAnchor).isActive = true
+            
+            
+            colorsOfSeenState[availableIndexesSeen[0]] = UIColor.init(red: CGFloat(rgbValuesOfSeenState[0])/255, green: CGFloat(rgbValuesOfSeenState[1])/255, blue: CGFloat(rgbValuesOfSeenState[2])/255, alpha: 1.0)
+            let vals = Array(colorsOfSeenState.values)
+            customizedView.storyGroupIconBorderColorSeen = vals
+            availableIndexesSeen.remove(at: 0)
+        
+        }
     }
     
     @objc func buttonAction(_ sender: UIButton){
         
         sender.superview?.removeFromSuperview()
-        availableIndexes.insert(sender.tag, at: 0)
-        availableIndexes.sort()
+        if(sender.tag % 2 == 0){//it means func called from notSeenState button
+            availableIndexesNotSeen.insert(sender.tag, at: 0)
+            availableIndexesNotSeen.sort()
+            colorsOfNotSeenSate.removeValue(forKey: sender.tag)
+            let val = Array(colorsOfNotSeenSate.values)
+            customizedView.storyGroupIconBorderColorNotSeen = val
+        }
+        else{
+            availableIndexesSeen.insert(sender.tag, at: 0)
+            availableIndexesSeen.sort()
+            colorsOfSeenState.removeValue(forKey: sender.tag)
+            let val = Array(colorsOfSeenState.values)
+            customizedView.storyGroupIconBorderColorSeen = val
+        }
+        
     }
+//    Story Group Size functions
+    @IBAction func convertToSmall(_ sender: Any) {
+        
+        smallButton.setImage(UIImage(systemName: "circle.inset.filled",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black), for: UIControl.State.normal)
+        customizedView.removeFromSuperview()
+        customizedView = StorylyView()
+        customizedView.storylyInit = StorylyInit(storylyId: STORYLY_INSTANCE_TOKEN)
+        customizedView.storyGroupSize = "small"
+        customizedView.rootViewController = self
+        customizedView.delegate = self
+        containerToCustom.addSubview(customizedView)
+        customizedView.translatesAutoresizingMaskIntoConstraints = false
+        customizedView.heightAnchor.constraint(equalTo: containerToCustom.heightAnchor).isActive = true
+        customizedView.widthAnchor.constraint(equalTo: containerToCustom.widthAnchor).isActive = true
+        customizedView.centerXAnchor.constraint(equalTo: containerToCustom.centerXAnchor).isActive = true
+        customizedView.centerYAnchor.constraint(equalTo: containerToCustom.centerYAnchor).isActive = true
+        if(pickedSize == "C"){
+            customButton.setImage(UIImage(systemName: "circle",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black), for: UIControl.State.normal)
+        }
+        else{
+            largeButton.setImage(UIImage(systemName: "circle",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black), for: UIControl.State.normal)
+        }
+        pickedSize = "S"
+        customizedView.storyGroupSize = "small"
+        
+    }
+    @IBAction func convertToLarge(_ sender: Any) {
+        largeButton.setImage(UIImage(systemName: "circle.inset.filled",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black), for: UIControl.State.normal)
+        customizedView.removeFromSuperview()
+        customizedView = StorylyView()
+        customizedView.storylyInit = StorylyInit(storylyId: STORYLY_INSTANCE_TOKEN)
+        customizedView.storyGroupSize = "large"
+        customizedView.rootViewController = self
+        customizedView.delegate = self
+        containerToCustom.addSubview(customizedView)
+        customizedView.translatesAutoresizingMaskIntoConstraints = false
+        customizedView.heightAnchor.constraint(equalTo: containerToCustom.heightAnchor).isActive = true
+        customizedView.widthAnchor.constraint(equalTo: containerToCustom.widthAnchor).isActive = true
+        customizedView.centerXAnchor.constraint(equalTo: containerToCustom.centerXAnchor).isActive = true
+        customizedView.centerYAnchor.constraint(equalTo: containerToCustom.centerYAnchor).isActive = true
+        if(pickedSize == "C"){
+            customButton.setImage(UIImage(systemName: "circle",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black), for: UIControl.State.normal)
+        }
+        else{
+            smallButton.setImage(UIImage(systemName: "circle",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black), for: UIControl.State.normal)
+        }
+        
+        pickedSize = "L"
+        customizedView.storyGroupSize = "large"
+    }
+    @IBAction func converToCustom(_ sender: Any) {
+        customButton.setImage(UIImage(systemName: "circle.inset.filled",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black), for: UIControl.State.normal)
+        if(pickedSize == "S"){
+            smallButton.setImage(UIImage(systemName: "circle",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black), for: UIControl.State.normal)
+        }
+        else{
+            largeButton.setImage(UIImage(systemName: "circle",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black), for: UIControl.State.normal)
+        }
+        pickedSize = "C"
+        customizedView.storyGroupSize = "custom"
+    }
+
+    
+    
+    @IBAction func applyCustomSizes(_ sender: Any) {
+//      12 needs to be changed to default values of storyly
+        if(pickedSize == "C"){
+            let h = Int(heightTextF.text ?? "12")
+            let w = Int(widthTextF.text  ?? "12")
+            let c = Int(cornerRadiusTextF.text  ?? "12")
+            customizedView.removeFromSuperview()
+            customizedView = StorylyView()
+            customizedView.storylyInit = StorylyInit(storylyId: STORYLY_INSTANCE_TOKEN)
+            customizedView.storyGroupSize = "custom"
+            customizedView.storyGroupIconStyling = StoryGroupIconStyling(height: CGFloat(h!), width: CGFloat(w!), cornerRadius: CGFloat(c!))
+            let currentValues = rgbValues[3]
+            customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible: self.storyGroupTextIsVisible, color:UIColor.init(red: CGFloat(currentValues[0])/255, green: CGFloat(currentValues[1])/255, blue: CGFloat(currentValues[2])/255, alpha: 1.0), font: self.font, lines: self.lineNumber)
+            
+            let currentValues2 = rgbValues[2]
+            customizedView.storyGroupIVodIconColor = UIColor.init(red: CGFloat(currentValues2[0])/255, green: CGFloat(currentValues2[1])/255, blue: CGFloat(currentValues2[2])/255, alpha: 1.0)
+            
+            let currentValues3 = rgbValues[1]
+            customizedView.storyGroupPinIconColor = UIColor.init(red: CGFloat(currentValues3[0])/255, green: CGFloat(currentValues3[1])/255, blue: CGFloat(currentValues3[2])/255, alpha: 1.0)
+            
+            let currentValues4 = rgbValues[0]
+            self.customizedView.storyGroupIconBackgroundColor = UIColor.init(red: CGFloat(currentValues4[0])/255, green: CGFloat(currentValues4[1])/255, blue: CGFloat(currentValues4[2])/255, alpha: 1.0)
+            
+            customizedView.rootViewController = self
+            customizedView.delegate = self
+            containerToCustom.addSubview(customizedView)
+            customizedView.translatesAutoresizingMaskIntoConstraints = false
+            customizedView.heightAnchor.constraint(equalTo: containerToCustom.heightAnchor).isActive = true
+            customizedView.widthAnchor.constraint(equalTo: containerToCustom.widthAnchor).isActive = true
+            customizedView.centerXAnchor.constraint(equalTo: containerToCustom.centerXAnchor).isActive = true
+            customizedView.centerYAnchor.constraint(equalTo: containerToCustom.centerYAnchor).isActive = true
+            print("applied")
+        }
+        
+    }
+    
+   
     
     
     
