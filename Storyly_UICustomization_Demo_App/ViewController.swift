@@ -63,6 +63,17 @@ class ViewController: UIViewController {
     @IBOutlet weak var heightTextF: UITextField!
     @IBOutlet weak var widthTextF: UITextField!
     @IBOutlet weak var cornerRadiusTextF: UITextField!
+//    NEEDS TO BE UPDATED WITH DEFAULT SIZES
+    var height = 12
+    var width = 12
+    var cRadius = 10
+    
+//    Story Group List Styling
+    
+    @IBOutlet weak var edgePadding: UITextField!
+    @IBOutlet weak var paddingBetweenItems: UITextField!
+    var edgePadValue = 10 //needs to be updated with new values
+    var padBetweenItemsValue = 10
     
     
     override func viewDidLoad() {
@@ -249,13 +260,13 @@ class ViewController: UIViewController {
         customizedView.widthAnchor.constraint(equalTo: containerToCustom.widthAnchor).isActive = true
         customizedView.centerXAnchor.constraint(equalTo: containerToCustom.centerXAnchor).isActive = true
         customizedView.centerYAnchor.constraint(equalTo: containerToCustom.centerYAnchor).isActive = true
-        if(pickedSize == "C"){
+        if(pickedSize == "custom"){
             customButton.setImage(UIImage(systemName: "circle",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black), for: UIControl.State.normal)
         }
         else{
             largeButton.setImage(UIImage(systemName: "circle",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black), for: UIControl.State.normal)
         }
-        pickedSize = "S"
+        pickedSize = "small"
         customizedView.storyGroupSize = "small"
         
     }
@@ -274,25 +285,25 @@ class ViewController: UIViewController {
         customizedView.widthAnchor.constraint(equalTo: containerToCustom.widthAnchor).isActive = true
         customizedView.centerXAnchor.constraint(equalTo: containerToCustom.centerXAnchor).isActive = true
         customizedView.centerYAnchor.constraint(equalTo: containerToCustom.centerYAnchor).isActive = true
-        if(pickedSize == "C"){
+        if(pickedSize == "custom"){
             customButton.setImage(UIImage(systemName: "circle",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black), for: UIControl.State.normal)
         }
         else{
             smallButton.setImage(UIImage(systemName: "circle",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black), for: UIControl.State.normal)
         }
         
-        pickedSize = "L"
+        pickedSize = "large"
         customizedView.storyGroupSize = "large"
     }
     @IBAction func converToCustom(_ sender: Any) {
         customButton.setImage(UIImage(systemName: "circle.inset.filled",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black), for: UIControl.State.normal)
-        if(pickedSize == "S"){
+        if(pickedSize == "small"){
             smallButton.setImage(UIImage(systemName: "circle",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black), for: UIControl.State.normal)
         }
         else{
             largeButton.setImage(UIImage(systemName: "circle",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black), for: UIControl.State.normal)
         }
-        pickedSize = "C"
+        pickedSize = "custom"
         customizedView.storyGroupSize = "custom"
     }
 
@@ -300,15 +311,19 @@ class ViewController: UIViewController {
     
     @IBAction func applyCustomSizes(_ sender: Any) {
 //      12 needs to be changed to default values of storyly
-        if(pickedSize == "C"){
+        if(pickedSize == "custom"){
             let h = Int(heightTextF.text ?? "12")
             let w = Int(widthTextF.text  ?? "12")
             let c = Int(cornerRadiusTextF.text  ?? "12")
+            height = h ?? 10
+            width = w ?? 10
+            cRadius = c ?? 10
             customizedView.removeFromSuperview()
             customizedView = StorylyView()
             customizedView.storylyInit = StorylyInit(storylyId: STORYLY_INSTANCE_TOKEN)
             customizedView.storyGroupSize = "custom"
             customizedView.storyGroupIconStyling = StoryGroupIconStyling(height: CGFloat(h!), width: CGFloat(w!), cornerRadius: CGFloat(c!))
+            customizedView.storyGroupListStyling = StoryGroupListStyling(edgePadding: CGFloat(edgePadValue), paddingBetweenItems: CGFloat(padBetweenItemsValue))
             let currentValues = rgbValues[3]
             customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible: self.storyGroupTextIsVisible, color:UIColor.init(red: CGFloat(currentValues[0])/255, green: CGFloat(currentValues[1])/255, blue: CGFloat(currentValues[2])/255, alpha: 1.0), font: self.font, lines: self.lineNumber)
             
@@ -360,7 +375,42 @@ class ViewController: UIViewController {
     }
     
     
+    @IBAction func applyListStyling(_ sender: Any) {
+        
+        edgePadValue = Int(edgePadding.text ?? "12") ?? 10
+        padBetweenItemsValue = Int(paddingBetweenItems.text ?? "12") ?? 10
+        
+        customizedView.removeFromSuperview()
+        customizedView = StorylyView()
+        customizedView.storylyInit = StorylyInit(storylyId: STORYLY_INSTANCE_TOKEN)
+        customizedView.storyGroupSize = pickedSize
+        if(pickedSize == "custom"){
+            customizedView.storyGroupIconStyling = StoryGroupIconStyling(height: CGFloat(height), width: CGFloat(width), cornerRadius: CGFloat(cRadius))
+        }
+        customizedView.rootViewController = self
+        customizedView.delegate = self
+        customizedView.storyGroupListStyling = StoryGroupListStyling(edgePadding: CGFloat(edgePadValue), paddingBetweenItems: CGFloat(padBetweenItemsValue))
+        bringBackOldProperties()
+        containerToCustom.addSubview(customizedView)
+        customizedView.translatesAutoresizingMaskIntoConstraints = false
+        customizedView.heightAnchor.constraint(equalTo: containerToCustom.heightAnchor).isActive = true
+        customizedView.widthAnchor.constraint(equalTo: containerToCustom.widthAnchor).isActive = true
+        customizedView.centerXAnchor.constraint(equalTo: containerToCustom.centerXAnchor).isActive = true
+        customizedView.centerYAnchor.constraint(equalTo: containerToCustom.centerYAnchor).isActive = true
+        
+    }
+    
+    
+    
+    
+    
 }
+
+
+
+
+
+
 
 extension ViewController: StorylyDelegate{
     
