@@ -241,6 +241,8 @@ class ViewController: UIViewController {
         customizedView.storyGroupSize = "small"
         customizedView.rootViewController = self
         customizedView.delegate = self
+        bringBackOldProperties()
+        
         containerToCustom.addSubview(customizedView)
         customizedView.translatesAutoresizingMaskIntoConstraints = false
         customizedView.heightAnchor.constraint(equalTo: containerToCustom.heightAnchor).isActive = true
@@ -265,6 +267,7 @@ class ViewController: UIViewController {
         customizedView.storyGroupSize = "large"
         customizedView.rootViewController = self
         customizedView.delegate = self
+        bringBackOldProperties()
         containerToCustom.addSubview(customizedView)
         customizedView.translatesAutoresizingMaskIntoConstraints = false
         customizedView.heightAnchor.constraint(equalTo: containerToCustom.heightAnchor).isActive = true
@@ -316,7 +319,7 @@ class ViewController: UIViewController {
             customizedView.storyGroupPinIconColor = UIColor.init(red: CGFloat(currentValues3[0])/255, green: CGFloat(currentValues3[1])/255, blue: CGFloat(currentValues3[2])/255, alpha: 1.0)
             
             let currentValues4 = rgbValues[0]
-            self.customizedView.storyGroupIconBackgroundColor = UIColor.init(red: CGFloat(currentValues4[0])/255, green: CGFloat(currentValues4[1])/255, blue: CGFloat(currentValues4[2])/255, alpha: 1.0)
+            customizedView.storyGroupIconBackgroundColor = UIColor.init(red: CGFloat(currentValues4[0])/255, green: CGFloat(currentValues4[1])/255, blue: CGFloat(currentValues4[2])/255, alpha: 1.0)
             
             customizedView.rootViewController = self
             customizedView.delegate = self
@@ -329,10 +332,32 @@ class ViewController: UIViewController {
             print("applied")
         }
         
+        
+        
+        
+        
     }
     
    
-    
+    func bringBackOldProperties()
+    {
+        let currentValues = rgbValues[3]
+        customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible: self.storyGroupTextIsVisible, color:UIColor.init(red: CGFloat(currentValues[0])/255, green: CGFloat(currentValues[1])/255, blue: CGFloat(currentValues[2])/255, alpha: 1.0), font: self.font, lines: self.lineNumber)
+        
+        let currentValues2 = rgbValues[2]
+        customizedView.storyGroupIVodIconColor = UIColor.init(red: CGFloat(currentValues2[0])/255, green: CGFloat(currentValues2[1])/255, blue: CGFloat(currentValues2[2])/255, alpha: 1.0)
+        
+        let currentValues3 = rgbValues[1]
+        customizedView.storyGroupPinIconColor = UIColor.init(red: CGFloat(currentValues3[0])/255, green: CGFloat(currentValues3[1])/255, blue: CGFloat(currentValues3[2])/255, alpha: 1.0)
+        
+        let currentValues4 = rgbValues[0]
+        customizedView.storyGroupIconBackgroundColor = UIColor.init(red: CGFloat(currentValues4[0])/255, green: CGFloat(currentValues4[1])/255, blue: CGFloat(currentValues4[2])/255, alpha: 1.0)
+        let vals = Array(colorsOfSeenState.values)
+        customizedView.storyGroupIconBorderColorSeen = vals
+        let val = Array(colorsOfNotSeenSate.values)
+        customizedView.storyGroupIconBorderColorNotSeen = val
+        
+    }
     
     
 }
