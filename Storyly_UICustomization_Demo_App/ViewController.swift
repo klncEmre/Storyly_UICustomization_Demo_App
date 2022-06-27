@@ -31,7 +31,7 @@ class ViewController: UIViewController {
 //    STORY GROUP COLORS
     @IBOutlet weak var stylesAndColors: UIPickerView!
     let properties = ["Background","Pin Icon","Ivod Icon","Text Color"]
-    var rgbValues = [[0,0,0],[189,61,16],[0,0,0],[0,0,0]]
+    var rgbValuesOfProperties = [[0,0,0],[189,61,16],[0,0,0],[0,0,0]] //needs to be updated with default values
     var currentPropertyIndex = 0
     @IBOutlet weak var colorShowcase: UIView!
 
@@ -50,9 +50,9 @@ class ViewController: UIViewController {
     let widthOfStack = 80
     var availableIndexesNotSeen = [0,2,4,6]
     var availableIndexesSeen = [1,3,5,7]
-    let colorsAndRGB = ["Red": [186,0,0],"Black":[1,0,0], "Yellow":[2,3,0]]
+    let colorsAndRGB = ["Red": [186,0,0],"Black":[0,0,0], "Yellow":[2,3,0]]
     var frontItem = "x"
-    var pickedSize = "L"
+    var pickedSize = "large"
     
     
 //    Story Group Size element
@@ -72,7 +72,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var edgePadding: UITextField!
     @IBOutlet weak var paddingBetweenItems: UITextField!
-    var edgePadValue = 10 //needs to be updated with new values
+    var edgePadValue = 10 //needs to be updated with default values
     var padBetweenItemsValue = 10
     
     
@@ -113,8 +113,27 @@ class ViewController: UIViewController {
     }
     
     @IBAction func resetButtonAction(_ sender: Any) {
-//        pickedC.text = backgroundField.text
-        print(heightTextF.text ?? "empty")
+        lineNumber = 2
+        fontSize = 12
+        font = UIFont.systemFont(ofSize: CGFloat(12))
+        rgbValuesOfProperties = [[0,0,0],[189,61,16],[0,0,0],[0,0,0]]
+//        COLORS OF BORDER STATES NEED TO BE RESETED
+        height = 12
+        width = 12
+        cRadius = 10
+        pickedSize = "large"
+        
+        customizedView.removeFromSuperview()
+        customizedView = StorylyView()
+        customizedView.storylyInit = StorylyInit(storylyId: STORYLY_INSTANCE_TOKEN)
+        customizedView.rootViewController = self
+        customizedView.delegate = self
+        containerToCustom.addSubview(customizedView)
+        customizedView.translatesAutoresizingMaskIntoConstraints = false
+        customizedView.heightAnchor.constraint(equalTo: containerToCustom.heightAnchor).isActive = true
+        customizedView.widthAnchor.constraint(equalTo: containerToCustom.widthAnchor).isActive = true
+        customizedView.centerXAnchor.constraint(equalTo: containerToCustom.centerXAnchor).isActive = true
+        customizedView.centerYAnchor.constraint(equalTo: containerToCustom.centerYAnchor).isActive = true
         
     }
     @IBAction func textVisibilityChange(_ sender: Any) {
@@ -127,7 +146,7 @@ class ViewController: UIViewController {
             storyGroupTextIsVisible = true
             textVisibleButton.setImage(UIImage(systemName: "circle.inset.filled",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black), for: UIControl.State.normal)
         }
-        let currentColor = rgbValues[3]
+        let currentColor = rgbValuesOfProperties[3]
         self.customizedView.storyGroupTextStyling = StoryGroupTextStyling(isVisible: self.storyGroupTextIsVisible, color: UIColor.init(red: CGFloat(currentColor[0])/255, green: CGFloat(currentColor[1])/255, blue: CGFloat(currentColor[2])/255, alpha: 1.0), font: font, lines: lineNumber)
         
     }
@@ -324,16 +343,16 @@ class ViewController: UIViewController {
             customizedView.storyGroupSize = "custom"
             customizedView.storyGroupIconStyling = StoryGroupIconStyling(height: CGFloat(h!), width: CGFloat(w!), cornerRadius: CGFloat(c!))
             customizedView.storyGroupListStyling = StoryGroupListStyling(edgePadding: CGFloat(edgePadValue), paddingBetweenItems: CGFloat(padBetweenItemsValue))
-            let currentValues = rgbValues[3]
+            let currentValues = rgbValuesOfProperties[3]
             customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible: self.storyGroupTextIsVisible, color:UIColor.init(red: CGFloat(currentValues[0])/255, green: CGFloat(currentValues[1])/255, blue: CGFloat(currentValues[2])/255, alpha: 1.0), font: self.font, lines: self.lineNumber)
             
-            let currentValues2 = rgbValues[2]
+            let currentValues2 = rgbValuesOfProperties[2]
             customizedView.storyGroupIVodIconColor = UIColor.init(red: CGFloat(currentValues2[0])/255, green: CGFloat(currentValues2[1])/255, blue: CGFloat(currentValues2[2])/255, alpha: 1.0)
             
-            let currentValues3 = rgbValues[1]
+            let currentValues3 = rgbValuesOfProperties[1]
             customizedView.storyGroupPinIconColor = UIColor.init(red: CGFloat(currentValues3[0])/255, green: CGFloat(currentValues3[1])/255, blue: CGFloat(currentValues3[2])/255, alpha: 1.0)
             
-            let currentValues4 = rgbValues[0]
+            let currentValues4 = rgbValuesOfProperties[0]
             customizedView.storyGroupIconBackgroundColor = UIColor.init(red: CGFloat(currentValues4[0])/255, green: CGFloat(currentValues4[1])/255, blue: CGFloat(currentValues4[2])/255, alpha: 1.0)
             
             customizedView.rootViewController = self
@@ -356,16 +375,16 @@ class ViewController: UIViewController {
    
     func bringBackOldProperties()
     {
-        let currentValues = rgbValues[3]
+        let currentValues = rgbValuesOfProperties[3]
         customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible: self.storyGroupTextIsVisible, color:UIColor.init(red: CGFloat(currentValues[0])/255, green: CGFloat(currentValues[1])/255, blue: CGFloat(currentValues[2])/255, alpha: 1.0), font: self.font, lines: self.lineNumber)
         
-        let currentValues2 = rgbValues[2]
+        let currentValues2 = rgbValuesOfProperties[2]
         customizedView.storyGroupIVodIconColor = UIColor.init(red: CGFloat(currentValues2[0])/255, green: CGFloat(currentValues2[1])/255, blue: CGFloat(currentValues2[2])/255, alpha: 1.0)
         
-        let currentValues3 = rgbValues[1]
+        let currentValues3 = rgbValuesOfProperties[1]
         customizedView.storyGroupPinIconColor = UIColor.init(red: CGFloat(currentValues3[0])/255, green: CGFloat(currentValues3[1])/255, blue: CGFloat(currentValues3[2])/255, alpha: 1.0)
         
-        let currentValues4 = rgbValues[0]
+        let currentValues4 = rgbValuesOfProperties[0]
         customizedView.storyGroupIconBackgroundColor = UIColor.init(red: CGFloat(currentValues4[0])/255, green: CGFloat(currentValues4[1])/255, blue: CGFloat(currentValues4[2])/255, alpha: 1.0)
         let vals = Array(colorsOfSeenState.values)
         customizedView.storyGroupIconBorderColorSeen = vals
@@ -514,7 +533,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         return "x"
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let currentColor = rgbValues[3]
+        let currentColor = rgbValuesOfProperties[3]
         if(component == 0){
             switch pickerView{
                 case fontPicker:
@@ -530,9 +549,9 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
             case stylesAndColors:
                 currentPropertyIndex = row
                 for i in 1...3{
-                    stylesAndColors.selectRow(rgbValues[row][i-1], inComponent: i, animated: true)
+                    stylesAndColors.selectRow(rgbValuesOfProperties[row][i-1], inComponent: i, animated: true)
                 }
-                let currentValues = rgbValues[currentPropertyIndex]
+                let currentValues = rgbValuesOfProperties[currentPropertyIndex]
                 colorShowcase.backgroundColor = UIColor.init(red: CGFloat(currentValues[0])/255, green: CGFloat(currentValues[1])/255, blue: CGFloat(currentValues[2])/255, alpha: 1.0)
                 break
             case stateColorPicker:
@@ -554,24 +573,24 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         }
         else if(pickerView == stylesAndColors && component != 0){
             
-            rgbValues[currentPropertyIndex][component-1] = row
-            var currentValues = rgbValues[0]
+            rgbValuesOfProperties[currentPropertyIndex][component-1] = row
+            var currentValues = rgbValuesOfProperties[0]
             switch currentPropertyIndex{
             case 0:
-                currentValues = rgbValues[0]
+                currentValues = rgbValuesOfProperties[0]
                 self.customizedView.storyGroupIconBackgroundColor = UIColor.init(red: CGFloat(currentValues[0])/255, green: CGFloat(currentValues[1])/255, blue: CGFloat(currentValues[2])/255, alpha: 1.0)
                 break
             case 1:
-                currentValues = rgbValues[1]
+                currentValues = rgbValuesOfProperties[1]
                 self.customizedView.storyGroupPinIconColor = UIColor.init(red: CGFloat(currentValues[0])/255, green: CGFloat(currentValues[1])/255, blue: CGFloat(currentValues[2])/255, alpha: 1.0)
                 
                 break
             case 2:
-                currentValues = rgbValues[2]
+                currentValues = rgbValuesOfProperties[2]
                 self.customizedView.storyGroupIVodIconColor = UIColor.init(red: CGFloat(currentValues[0])/255, green: CGFloat(currentValues[1])/255, blue: CGFloat(currentValues[2])/255, alpha: 1.0)
                 break
             case 3:
-                currentValues = rgbValues[3]
+                currentValues = rgbValuesOfProperties[3]
                 self.customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible: self.storyGroupTextIsVisible, color:UIColor.init(red: CGFloat(currentValues[0])/255, green: CGFloat(currentValues[1])/255, blue: CGFloat(currentValues[2])/255, alpha: 1.0), font: self.font, lines: self.lineNumber)
                 break
             default:
