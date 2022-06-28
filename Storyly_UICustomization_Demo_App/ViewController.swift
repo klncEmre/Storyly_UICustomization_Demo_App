@@ -553,12 +553,8 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
             font = font.withSize(CGFloat(fontSize))
             self.customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible: self.storyGroupTextIsVisible, color:UIColor(hexString: currentColor ?? "#000000"), font: self.font, lines: self.lineNumber)
         }
-        
-       
-                
     }
-    
-    
+
     func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
         let w = pickerView.frame.size.width
         
@@ -567,20 +563,16 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
                 return w 
             
             case fontPicker:
-                return w
+                return w/2
             case lineNumberPicker:
                 return w
-            
-        
         default:
             return w
         }
-        
-    
     }
 }
 
-//:- Extension for UIImage for hex values
+// Extension for UIImage for hex values
 
 
 extension UIColor {
