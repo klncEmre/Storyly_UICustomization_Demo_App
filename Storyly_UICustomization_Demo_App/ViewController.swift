@@ -36,14 +36,13 @@ class ViewController: UIViewController {
     var currentPropertyIndex = "Background" //change this to property name
     @IBOutlet weak var colorShowcase: UIView!
     @IBOutlet weak var colorField: UITextField!
-    
 
 //Seen - Not seen system
     @IBOutlet weak var seenColorView: UIView!
     @IBOutlet weak var notSeenColorView: UIView!
     let seenStack = UIStackView()
     let notSeenStack = UIStackView()
-    var colorsOfSeenState : [UIColor] = []
+    var colorsOfSeenState : [Int:UIColor] = [:]
     var colorsOfNotSeenSate: [Int:UIColor] = [:]
     var rgbValuesOfSeenState:[Int] = [0,0,0]
     var rgbValuesOfNotSeenState:[Int] = [0,0,0]
@@ -51,15 +50,13 @@ class ViewController: UIViewController {
     @IBOutlet weak var notSeenColorsLabel: UILabel!
     @IBOutlet weak var seenColorsLabel: UILabel!
     @IBOutlet weak var borderColorField: UITextField!
-    
     var coordinateKeeperNotSeen = 20.0
-    let widthOfStack = 80
-    var availableIndexesNotSeen = [0,2,4,6]
-
+    let widthOfStack = 60
+    var availableIndexesNotSeen = [0,2,4,6,8]
+    var availableIndexesSeen = [1,3,5,7,9]
     let colorsAndRGB = ["Red": [186,0,0],"Black":[0,0,0], "Yellow":[2,3,0]]
     var frontItem = "x"
     var pickedSize = "large"
-    
     
 //    Story Group Size element
     @IBOutlet weak var smallButton: UIButton!
@@ -114,11 +111,18 @@ class ViewController: UIViewController {
         colorShowcase.backgroundColor = UIColor.black
         
         colorField.delegate = self
+        colorField.tag = 0
         customDesignView.isUserInteractionEnabled = false
         seenColorView.addSubview(seenStack)
+        notSeenColorView.addSubview(notSeenStack)
         seenStack.translatesAutoresizingMaskIntoConstraints = false
-        seenStack.leftAnchor.constraint(equalTo: seenColorsLabel.rightAnchor,constant: CGFloat(20)).isActive = true
+        seenStack.leftAnchor.constraint(equalTo: seenColorsLabel.rightAnchor,constant: CGFloat(10)).isActive = true
         seenStack.spacing = CGFloat(10)
+        notSeenStack.translatesAutoresizingMaskIntoConstraints = false
+        notSeenStack.leftAnchor.constraint(equalTo: notSeenColorsLabel.rightAnchor,constant: CGFloat(10)).isActive = true
+        notSeenStack.spacing = CGFloat(10)
+        borderColorField.tag = 1
+        borderColorField.delegate = self
         
     }
     
@@ -194,107 +198,84 @@ class ViewController: UIViewController {
     
     
     @IBAction func notSeenAddButton(_ sender: Any) {
-        if(!availableIndexesNotSeen.isEmpty){
-            let myStak = UIView()
-            myStak.translatesAutoresizingMaskIntoConstraints = false
-
-            notSeenColorView.addSubview(myStak)
-            myStak.widthAnchor.constraint(equalToConstant: CGFloat(widthOfStack)).isActive = true
-            myStak.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
-            myStak.leftAnchor.constraint(equalTo: notSeenColorsLabel.rightAnchor , constant: CGFloat((Double(widthOfStack * availableIndexesNotSeen[0]) / 2.0) * 1.1)).isActive = true
-            myStak.centerYAnchor.constraint(equalTo: notSeenColorsLabel.centerYAnchor).isActive = true
-        
-            let button = UIButton()
-            button.tag = availableIndexesNotSeen[0]
-            button.addTarget(self, action: #selector(buttonActionForStateColors), for: .touchUpInside)
-            button.translatesAutoresizingMaskIntoConstraints = false
-            button.setImage(UIImage.init(systemName: "clear.fill"), for: .normal)
-
-            lazy var myLabel: UILabel = {
-                let label = UILabel()
-                label.translatesAutoresizingMaskIntoConstraints = false
-                label.text = "(" + rgbValuesOfNotSeenState[0].description + ", " +  rgbValuesOfNotSeenState[1].description + ", " + rgbValuesOfNotSeenState[2].description + ")"
-                label.font = UIFont.systemFont(ofSize: 12)
-                return label
-            }()
-            myStak.layer.cornerRadius = 8
-            myStak.backgroundColor = UIColor.lightGray.withAlphaComponent(0.4)
-            myStak.addSubview(button)
-            myStak.addSubview(myLabel)
-            button.widthAnchor.constraint(equalToConstant: CGFloat(Double(widthOfStack) * 0.4)).isActive = true
-            button.heightAnchor.constraint(equalToConstant: CGFloat(20)).isActive = true
-            button.centerYAnchor.constraint(equalTo: myStak.centerYAnchor).isActive = true
-            button.rightAnchor.constraint(equalTo: myStak.rightAnchor,constant: CGFloat(-3)).isActive = true
-            myLabel.translatesAutoresizingMaskIntoConstraints = false
-            myLabel.leftAnchor.constraint(equalTo: myStak.leftAnchor,constant: CGFloat(2)).isActive = true
-            myLabel.centerYAnchor.constraint(equalTo: myStak.centerYAnchor).isActive = true
-            
-            
-            colorsOfNotSeenSate[availableIndexesNotSeen[0]] =  UIColor.init(red: CGFloat(rgbValuesOfNotSeenState[0])/255, green: CGFloat(rgbValuesOfNotSeenState[1])/255, blue: CGFloat(rgbValuesOfNotSeenState[2])/255, alpha: 1.0) //to fill the border colors dict
-            let val = Array(colorsOfNotSeenSate.values)
-            customizedView.storyGroupIconBorderColorNotSeen = val
-            availableIndexesNotSeen.remove(at: 0)
+        if(availableIndexesNotSeen.isEmpty){
+            return
         }
-       
+        let myStack = UIStackView() // will be convertted to stack
+        myStack.translatesAutoresizingMaskIntoConstraints = false
+        notSeenStack.addArrangedSubview(myStack)
+        myStack.widthAnchor.constraint(equalToConstant: CGFloat(widthOfStack)).isActive = true
+        myStack.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
+        myStack.centerYAnchor.constraint(equalTo: notSeenColorsLabel.centerYAnchor).isActive = true
+        let button = UIButton()
+        button.tag = availableIndexesNotSeen[0]
+        availableIndexesNotSeen.remove(at: 0)
+        colorsOfNotSeenSate[button.tag] = UIColor(hexString: borderColorField.text ?? "#FFFFFF")
+        
+        //index for removing the color
+        button.addTarget(self, action: #selector(buttonActionForStateColors), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle(borderColorField.text ?? "#FFFFFF", for: UIControl.State.normal)
+        button.titleLabel?.font = .systemFont(ofSize: 10)
+        button.backgroundColor = UIColor(hexString: borderColorField.text ?? "#FFFFFF")
+        myStack.addSubview(button)
+        button.widthAnchor.constraint(equalToConstant: CGFloat(widthOfStack)).isActive = true
+        button.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
+        button.centerYAnchor.constraint(equalTo: myStack.centerYAnchor).isActive = true
+        button.rightAnchor.constraint(equalTo: myStack.rightAnchor,constant: CGFloat(-3)).isActive = true
+        button.layer.cornerRadius = 8
+        let v = Array(colorsOfNotSeenSate.values)
+        customizedView.storyGroupIconBorderColorNotSeen = v
+        
     }
     
     @IBAction func seenAddButton(_ sender: Any) {
-       
+        if(availableIndexesSeen.isEmpty){
+            return
+        }
         let myStack = UIStackView() // will be convertted to stack
         myStack.translatesAutoresizingMaskIntoConstraints = false
-
         seenStack.addArrangedSubview(myStack)
         myStack.widthAnchor.constraint(equalToConstant: CGFloat(widthOfStack)).isActive = true
         myStack.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
         myStack.centerYAnchor.constraint(equalTo: seenColorsLabel.centerYAnchor).isActive = true
     
         let button = UIButton()
-        button.tag = 1
+        button.tag = availableIndexesSeen[0]
+        availableIndexesSeen.remove(at: 0)
+        colorsOfSeenState[button.tag] = UIColor(hexString: borderColorField.text ?? "#FFFFFF")
+        
         button.addTarget(self, action: #selector(buttonActionForStateColors), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        button.setImage(UIImage.init(systemName: "clear.fill"), for: .normal)
-
-        lazy var myLabel: UILabel = {
-            let label = UILabel()
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.text = "(" + rgbValuesOfSeenState[0].description + ", " +  rgbValuesOfSeenState[1].description + ", " + rgbValuesOfSeenState[2].description + ")"
-            label.font = UIFont.systemFont(ofSize: 12)
-            return label
-        }()
-        myStack.layer.cornerRadius = 8
-        myStack.backgroundColor = UIColor.lightGray.withAlphaComponent(0.4)
+        button.setTitle(borderColorField.text ?? "#FFFFFF", for: UIControl.State.normal)
+        button.titleLabel?.font = .systemFont(ofSize: 10)
+        button.backgroundColor = UIColor(hexString: borderColorField.text ?? "#FFFFFF")
         myStack.addSubview(button)
-        myStack.addSubview(myLabel)
-        button.widthAnchor.constraint(equalToConstant: CGFloat(Double(widthOfStack) * 0.4)).isActive = true
-        button.heightAnchor.constraint(equalToConstant: CGFloat(20)).isActive = true
+        button.widthAnchor.constraint(equalToConstant: CGFloat(widthOfStack)).isActive = true
+        button.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
         button.centerYAnchor.constraint(equalTo: myStack.centerYAnchor).isActive = true
         button.rightAnchor.constraint(equalTo: myStack.rightAnchor,constant: CGFloat(-3)).isActive = true
-        myLabel.translatesAutoresizingMaskIntoConstraints = false
-        myLabel.leftAnchor.constraint(equalTo: myStack.leftAnchor,constant: CGFloat(2)).isActive = true
-        myLabel.centerYAnchor.constraint(equalTo: myStack.centerYAnchor).isActive = true
-        
-       
-        colorsOfSeenState.append( UIColor.init(red: CGFloat(rgbValuesOfSeenState[0])/255, green: CGFloat(rgbValuesOfSeenState[1])/255, blue: CGFloat(rgbValuesOfSeenState[2])/255, alpha: 1.0))
-        customizedView.storyGroupIconBorderColorSeen = colorsOfSeenState
-        
-    
-        
+        button.layer.cornerRadius = 8
+        let v = Array(colorsOfSeenState.values)
+        customizedView.storyGroupIconBorderColorSeen = v
     }
     
     @objc func buttonActionForStateColors(_ sender: UIButton){
         
         sender.superview?.removeFromSuperview()
-        if(sender.tag % 2 == 0){//it means func called from notSeenState button
-            availableIndexesNotSeen.insert(sender.tag, at: 0)
-            availableIndexesNotSeen.sort()
+        let keysNotSeen = Array(colorsOfNotSeenSate.keys)
+        if(keysNotSeen.contains(sender.tag)){//it means func called from notSeenState button
             colorsOfNotSeenSate.removeValue(forKey: sender.tag)
-            let val = Array(colorsOfNotSeenSate.values)
-            customizedView.storyGroupIconBorderColorNotSeen = val
+            let v = Array(colorsOfNotSeenSate.values)
+            customizedView.storyGroupIconBorderColorNotSeen = v
+            availableIndexesNotSeen.append(sender.tag)
         }
         else{
-           
-            customizedView.storyGroupIconBorderColorSeen = colorsOfSeenState
+            colorsOfSeenState.removeValue(forKey: sender.tag)
+            let v = Array(colorsOfSeenState.values)
+            customizedView.storyGroupIconBorderColorSeen = v
+            availableIndexesSeen.append(sender.tag)
         }
         
     }
@@ -425,10 +406,10 @@ class ViewController: UIViewController {
         
         let currentValues4 = properties["Background"]
         customizedView.storyGroupIconBackgroundColor = UIColor(hexString: currentValues4 ?? "#000000")
-       
-        customizedView.storyGroupIconBorderColorSeen = colorsOfSeenState
-        let val = Array(colorsOfNotSeenSate.values)
-        customizedView.storyGroupIconBorderColorNotSeen = val
+        let valuesSeen = Array(colorsOfSeenState.values)
+        let valuesNotSeen = Array(colorsOfNotSeenSate.values)
+        customizedView.storyGroupIconBorderColorSeen = valuesSeen
+        customizedView.storyGroupIconBorderColorNotSeen = valuesNotSeen
         
     }
     
@@ -626,21 +607,28 @@ extension UIColor {
 
 extension ViewController: UITextFieldDelegate{
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        if let toCheck = textField.text{
-            if(toCheck.count == 7){
-                return true
+        
+            if let toCheck = textField.text{
+                if(toCheck.count == 7 && textField.tag == 0){
+                    return true
+                }
+                else if(toCheck.count == 7 && textField.tag == 1){
+                    return true
+                }
+           
             }
-       
-        }
         return false
     }
     
     public func textFieldDidEndEditing(_ textField: UITextField) {
-        colorShowcase.backgroundColor = UIColor(hexString: textField.text ?? "#000000")
+        if(textField == colorField){
+            colorShowcase.backgroundColor = UIColor(hexString: textField.text ?? "#000000")
+            
+        }
+        
+        
     }
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        print("check")
-    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.endEditing(true)
         return true
