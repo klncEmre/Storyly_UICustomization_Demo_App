@@ -41,18 +41,21 @@ class ViewController: UIViewController {
 //Seen - Not seen system
     @IBOutlet weak var seenColorView: UIView!
     @IBOutlet weak var notSeenColorView: UIView!
-    var colorsOfSeenState : [Int:UIColor] = [:]
+    let seenStack = UIStackView()
+    let notSeenStack = UIStackView()
+    var colorsOfSeenState : [UIColor] = []
     var colorsOfNotSeenSate: [Int:UIColor] = [:]
     var rgbValuesOfSeenState:[Int] = [0,0,0]
     var rgbValuesOfNotSeenState:[Int] = [0,0,0]
     @IBOutlet weak var viewsContainer: UIView!
     @IBOutlet weak var notSeenColorsLabel: UILabel!
     @IBOutlet weak var seenColorsLabel: UILabel!
-    @IBOutlet weak var stateColorPicker: UIPickerView!
+    @IBOutlet weak var borderColorField: UITextField!
+    
     var coordinateKeeperNotSeen = 20.0
     let widthOfStack = 80
     var availableIndexesNotSeen = [0,2,4,6]
-    var availableIndexesSeen = [1,3,5,7]
+
     let colorsAndRGB = ["Red": [186,0,0],"Black":[0,0,0], "Yellow":[2,3,0]]
     var frontItem = "x"
     var pickedSize = "large"
@@ -109,11 +112,13 @@ class ViewController: UIViewController {
         colorShowcase.layer.cornerRadius = colorShowcase.frame.size.width/2
         colorShowcase.clipsToBounds = true
         colorShowcase.backgroundColor = UIColor.black
-        stateColorPicker.delegate = self
-        stateColorPicker.dataSource = self
+        
         colorField.delegate = self
         customDesignView.isUserInteractionEnabled = false
-        
+        seenColorView.addSubview(seenStack)
+        seenStack.translatesAutoresizingMaskIntoConstraints = false
+        seenStack.leftAnchor.constraint(equalTo: seenColorsLabel.rightAnchor,constant: CGFloat(20)).isActive = true
+        seenStack.spacing = CGFloat(10)
         
     }
     
@@ -234,49 +239,47 @@ class ViewController: UIViewController {
     }
     
     @IBAction func seenAddButton(_ sender: Any) {
-        if(!availableIndexesSeen.isEmpty){
-            let myStack = UIView() // will be convertted to stack
-            myStack.translatesAutoresizingMaskIntoConstraints = false
+       
+        let myStack = UIStackView() // will be convertted to stack
+        myStack.translatesAutoresizingMaskIntoConstraints = false
 
-            seenColorView.addSubview(myStack)
-            myStack.widthAnchor.constraint(equalToConstant: CGFloat(widthOfStack)).isActive = true
-            myStack.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
-            myStack.leftAnchor.constraint(equalTo: seenColorsLabel.rightAnchor , constant: CGFloat((Double(widthOfStack * (availableIndexesSeen[0] - 1)) / 2.0) * 1.1)).isActive = true
-            myStack.centerYAnchor.constraint(equalTo: seenColorsLabel.centerYAnchor).isActive = true
+        seenStack.addArrangedSubview(myStack)
+        myStack.widthAnchor.constraint(equalToConstant: CGFloat(widthOfStack)).isActive = true
+        myStack.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
+        myStack.centerYAnchor.constraint(equalTo: seenColorsLabel.centerYAnchor).isActive = true
+    
+        let button = UIButton()
+        button.tag = 1
+        button.addTarget(self, action: #selector(buttonActionForStateColors), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
         
-            let button = UIButton()
-            button.tag = availableIndexesSeen[0]
-            button.addTarget(self, action: #selector(buttonActionForStateColors), for: .touchUpInside)
-            button.translatesAutoresizingMaskIntoConstraints = false
-            
-            button.setImage(UIImage.init(systemName: "clear.fill"), for: .normal)
+        button.setImage(UIImage.init(systemName: "clear.fill"), for: .normal)
 
-            lazy var myLabel: UILabel = {
-                let label = UILabel()
-                label.translatesAutoresizingMaskIntoConstraints = false
-                label.text = "(" + rgbValuesOfSeenState[0].description + ", " +  rgbValuesOfSeenState[1].description + ", " + rgbValuesOfSeenState[2].description + ")"
-                label.font = UIFont.systemFont(ofSize: 12)
-                return label
-            }()
-            myStack.layer.cornerRadius = 8
-            myStack.backgroundColor = UIColor.lightGray.withAlphaComponent(0.4)
-            myStack.addSubview(button)
-            myStack.addSubview(myLabel)
-            button.widthAnchor.constraint(equalToConstant: CGFloat(Double(widthOfStack) * 0.4)).isActive = true
-            button.heightAnchor.constraint(equalToConstant: CGFloat(20)).isActive = true
-            button.centerYAnchor.constraint(equalTo: myStack.centerYAnchor).isActive = true
-            button.rightAnchor.constraint(equalTo: myStack.rightAnchor,constant: CGFloat(-3)).isActive = true
-            myLabel.translatesAutoresizingMaskIntoConstraints = false
-            myLabel.leftAnchor.constraint(equalTo: myStack.leftAnchor,constant: CGFloat(2)).isActive = true
-            myLabel.centerYAnchor.constraint(equalTo: myStack.centerYAnchor).isActive = true
-            
-            
-            colorsOfSeenState[availableIndexesSeen[0]] = UIColor.init(red: CGFloat(rgbValuesOfSeenState[0])/255, green: CGFloat(rgbValuesOfSeenState[1])/255, blue: CGFloat(rgbValuesOfSeenState[2])/255, alpha: 1.0)
-            let vals = Array(colorsOfSeenState.values)
-            customizedView.storyGroupIconBorderColorSeen = vals
-            availableIndexesSeen.remove(at: 0)
+        lazy var myLabel: UILabel = {
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.text = "(" + rgbValuesOfSeenState[0].description + ", " +  rgbValuesOfSeenState[1].description + ", " + rgbValuesOfSeenState[2].description + ")"
+            label.font = UIFont.systemFont(ofSize: 12)
+            return label
+        }()
+        myStack.layer.cornerRadius = 8
+        myStack.backgroundColor = UIColor.lightGray.withAlphaComponent(0.4)
+        myStack.addSubview(button)
+        myStack.addSubview(myLabel)
+        button.widthAnchor.constraint(equalToConstant: CGFloat(Double(widthOfStack) * 0.4)).isActive = true
+        button.heightAnchor.constraint(equalToConstant: CGFloat(20)).isActive = true
+        button.centerYAnchor.constraint(equalTo: myStack.centerYAnchor).isActive = true
+        button.rightAnchor.constraint(equalTo: myStack.rightAnchor,constant: CGFloat(-3)).isActive = true
+        myLabel.translatesAutoresizingMaskIntoConstraints = false
+        myLabel.leftAnchor.constraint(equalTo: myStack.leftAnchor,constant: CGFloat(2)).isActive = true
+        myLabel.centerYAnchor.constraint(equalTo: myStack.centerYAnchor).isActive = true
         
-        }
+       
+        colorsOfSeenState.append( UIColor.init(red: CGFloat(rgbValuesOfSeenState[0])/255, green: CGFloat(rgbValuesOfSeenState[1])/255, blue: CGFloat(rgbValuesOfSeenState[2])/255, alpha: 1.0))
+        customizedView.storyGroupIconBorderColorSeen = colorsOfSeenState
+        
+    
+        
     }
     
     @objc func buttonActionForStateColors(_ sender: UIButton){
@@ -290,11 +293,8 @@ class ViewController: UIViewController {
             customizedView.storyGroupIconBorderColorNotSeen = val
         }
         else{
-            availableIndexesSeen.insert(sender.tag, at: 0)
-            availableIndexesSeen.sort()
-            colorsOfSeenState.removeValue(forKey: sender.tag)
-            let val = Array(colorsOfSeenState.values)
-            customizedView.storyGroupIconBorderColorSeen = val
+           
+            customizedView.storyGroupIconBorderColorSeen = colorsOfSeenState
         }
         
     }
@@ -425,8 +425,8 @@ class ViewController: UIViewController {
         
         let currentValues4 = properties["Background"]
         customizedView.storyGroupIconBackgroundColor = UIColor(hexString: currentValues4 ?? "#000000")
-        let vals = Array(colorsOfSeenState.values)
-        customizedView.storyGroupIconBorderColorSeen = vals
+       
+        customizedView.storyGroupIconBorderColorSeen = colorsOfSeenState
         let val = Array(colorsOfNotSeenSate.values)
         customizedView.storyGroupIconBorderColorNotSeen = val
         
@@ -458,10 +458,6 @@ class ViewController: UIViewController {
         
     }
     
-    
-    
-    
-    
 }
 
 
@@ -483,9 +479,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         else if (pickerView == stylesAndColors){
             return 1
         }
-        else if(pickerView == stateColorPicker){
-            return 4
-        }
+    
         else if(pickerView == lineNumberPicker){
             return 1
         }
@@ -506,17 +500,13 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
                 return 5
             case stylesAndColors:
                 return properties.count
-            case stateColorPicker:
-                return colorsAndRGB.count
             default:
                 return 1
             }
             
           
         }
-        else if(component != 0 && pickerView ==  stateColorPicker){
-            return 255
-        }
+       
         else if(component == 1 && pickerView == fontPicker) {
             return 12
         }
@@ -537,10 +527,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
                     return  (row+1).description
                 case stylesAndColors:
                     return propertiesNames[row]
-                case stateColorPicker:
-                    let k = Array(colorsAndRGB.keys)
-                    frontItem = k[row]
-                    return k[row]
+    
                 default:
                     return "x"
             }
@@ -548,21 +535,6 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         }
         else if(pickerView == fontPicker && component == 1){
             return (row+1).description
-        }
-        else if(pickerView == stateColorPicker ) {
-            if(component == 3){
-                let v = Array(colorsAndRGB.values)
-                rgbValuesOfNotSeenState = v[1]
-                stateColorPicker.selectRow(1, inComponent: 0, animated: true)
-                for i in 1...3{
-                    stateColorPicker.selectRow(v[1][i-1], inComponent: i, animated: true)
-                }
-                
-
-            }
-            return row.description
-            
-            
         }
         return "x"
     }
@@ -589,13 +561,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
                
                 
                 break
-            case stateColorPicker:
-                let v = Array(colorsAndRGB.values)
-                rgbValuesOfNotSeenState = v[row]
-                for i in 1...3{
-                    stateColorPicker.selectRow(v[row][i-1], inComponent: i, animated: true)
-                }
-                break
+            
             default:
                 break
             }
@@ -614,14 +580,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
         let w = pickerView.frame.size.width
-        if(pickerView == stateColorPicker ){
-            if(component == 0){
-                return w * 0.4
-            }
-            else {
-                return w * 0.2
-            }
-        }
+        
         switch pickerView{
             case stylesAndColors:
                 return w 

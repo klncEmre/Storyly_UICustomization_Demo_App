@@ -323,22 +323,34 @@
                                                 </constraints>
                                             </view>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="wuC-Ue-DDH">
-                                                <rect key="frame" x="0.0" y="647" width="640" height="300"/>
+                                                <rect key="frame" x="0.0" y="647" width="640" height="220"/>
                                                 <subviews>
-                                                    <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8No-33-tdW">
-                                                        <rect key="frame" x="0.0" y="0.0" width="640" height="150"/>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yCi-Z7-KeM">
+                                                        <rect key="frame" x="0.0" y="0.0" width="640" height="70"/>
+                                                        <subviews>
+                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="#000000" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kfQ-ec-vUa">
+                                                                <rect key="frame" x="50" y="18" width="540" height="34"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                <textInputTraits key="textInputTraits"/>
+                                                            </textField>
+                                                        </subviews>
+                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="150" id="Bq5-y4-VU4"/>
+                                                            <constraint firstItem="kfQ-ec-vUa" firstAttribute="centerY" secondItem="yCi-Z7-KeM" secondAttribute="centerY" id="dEU-a8-CeK"/>
+                                                            <constraint firstItem="kfQ-ec-vUa" firstAttribute="centerX" secondItem="yCi-Z7-KeM" secondAttribute="centerX" id="ebh-bE-kiq"/>
+                                                            <constraint firstAttribute="height" constant="70" id="ifl-FD-Yyl"/>
+                                                            <constraint firstItem="kfQ-ec-vUa" firstAttribute="leading" secondItem="yCi-Z7-KeM" secondAttribute="leading" constant="50" id="oTi-NA-IaC"/>
+                                                            <constraint firstAttribute="trailing" secondItem="kfQ-ec-vUa" secondAttribute="trailing" constant="50" id="zIK-GS-gw9"/>
                                                         </constraints>
-                                                    </pickerView>
+                                                    </view>
                                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="hl3-mf-Cga">
-                                                        <rect key="frame" x="0.0" y="150" width="640" height="50"/>
+                                                        <rect key="frame" x="0.0" y="70" width="640" height="50"/>
                                                         <subviews>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zno-TT-tm0">
                                                                 <rect key="frame" x="0.0" y="0.0" width="315" height="50"/>
                                                                 <subviews>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ILq-bv-kd4">
-                                                                        <rect key="frame" x="7" y="5" width="301" height="40"/>
+                                                                        <rect key="frame" x="50" y="5" width="258" height="40"/>
                                                                         <state key="normal" title="Button"/>
                                                                         <buttonConfiguration key="configuration" style="filled" title="Add to not seen border colors"/>
                                                                         <connections>
@@ -349,8 +361,7 @@
                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="bottom" secondItem="ILq-bv-kd4" secondAttribute="bottom" constant="5" id="Gcz-cK-bAR"/>
-                                                                    <constraint firstItem="ILq-bv-kd4" firstAttribute="leading" secondItem="Zno-TT-tm0" secondAttribute="leading" constant="7" id="I17-Ec-jaE"/>
-                                                                    <constraint firstItem="ILq-bv-kd4" firstAttribute="centerX" secondItem="Zno-TT-tm0" secondAttribute="centerX" id="Pv3-Bf-pO2"/>
+                                                                    <constraint firstItem="ILq-bv-kd4" firstAttribute="leading" secondItem="Zno-TT-tm0" secondAttribute="leading" constant="50" id="I17-Ec-jaE"/>
                                                                     <constraint firstAttribute="trailing" secondItem="ILq-bv-kd4" secondAttribute="trailing" constant="7" id="Rep-dr-3dP"/>
                                                                     <constraint firstItem="ILq-bv-kd4" firstAttribute="centerY" secondItem="Zno-TT-tm0" secondAttribute="centerY" id="SKT-6Y-H1Z"/>
                                                                     <constraint firstItem="ILq-bv-kd4" firstAttribute="top" secondItem="Zno-TT-tm0" secondAttribute="top" constant="5" id="iJ7-OM-uR6"/>
@@ -360,7 +371,7 @@
                                                                 <rect key="frame" x="325" y="0.0" width="315" height="50"/>
                                                                 <subviews>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eX8-E9-Mc9">
-                                                                        <rect key="frame" x="7" y="5" width="301" height="40"/>
+                                                                        <rect key="frame" x="7" y="5" width="258" height="40"/>
                                                                         <state key="normal" title="Button"/>
                                                                         <buttonConfiguration key="configuration" style="filled" title="Add to seen border colors"/>
                                                                         <connections>
@@ -372,10 +383,9 @@
                                                                 <constraints>
                                                                     <constraint firstAttribute="bottom" secondItem="eX8-E9-Mc9" secondAttribute="bottom" constant="5" id="4Hh-WV-qau"/>
                                                                     <constraint firstItem="eX8-E9-Mc9" firstAttribute="top" secondItem="du2-5h-e7T" secondAttribute="top" constant="5" id="MV1-xF-N2P"/>
-                                                                    <constraint firstItem="eX8-E9-Mc9" firstAttribute="centerX" secondItem="du2-5h-e7T" secondAttribute="centerX" id="bCQ-YK-BEe"/>
                                                                     <constraint firstItem="eX8-E9-Mc9" firstAttribute="leading" secondItem="du2-5h-e7T" secondAttribute="leading" constant="7" id="hB8-5z-Lkj"/>
                                                                     <constraint firstItem="eX8-E9-Mc9" firstAttribute="centerY" secondItem="du2-5h-e7T" secondAttribute="centerY" id="kbD-BR-E1y"/>
-                                                                    <constraint firstAttribute="trailing" secondItem="eX8-E9-Mc9" secondAttribute="trailing" constant="7" id="xJ3-C5-eUw"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="eX8-E9-Mc9" secondAttribute="trailing" constant="50" id="xJ3-C5-eUw"/>
                                                                 </constraints>
                                                             </view>
                                                         </subviews>
@@ -384,10 +394,10 @@
                                                         </constraints>
                                                     </stackView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vxZ-sa-kJ3">
-                                                        <rect key="frame" x="0.0" y="200" width="640" height="50"/>
+                                                        <rect key="frame" x="0.0" y="120" width="640" height="50"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SEEN STATE COLORS" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xB1-3O-4Cs">
-                                                                <rect key="frame" x="5" y="9.5" width="80" height="31.5"/>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SEEN " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xB1-3O-4Cs">
+                                                                <rect key="frame" x="5" y="17" width="80" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="80" id="1qR-CA-WHg"/>
                                                                 </constraints>
@@ -404,10 +414,10 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XpM-hp-Z0E">
-                                                        <rect key="frame" x="0.0" y="250" width="640" height="50"/>
+                                                        <rect key="frame" x="0.0" y="170" width="640" height="50"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NOT SEEN STATE COLORS" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rGn-Qe-rJU">
-                                                                <rect key="frame" x="5" y="1.5" width="80" height="47"/>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NOT SEEN" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rGn-Qe-rJU">
+                                                                <rect key="frame" x="5" y="17" width="80" height="16"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="80" id="e2k-KC-xaH"/>
                                                                 </constraints>
@@ -426,14 +436,12 @@
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="trailing" secondItem="8No-33-tdW" secondAttribute="trailing" id="0GL-9R-9Bq"/>
                                                     <constraint firstAttribute="trailing" secondItem="vxZ-sa-kJ3" secondAttribute="trailing" id="D1K-8p-pHW"/>
                                                     <constraint firstAttribute="trailing" secondItem="XpM-hp-Z0E" secondAttribute="trailing" id="ZFY-ZW-UYp"/>
-                                                    <constraint firstItem="8No-33-tdW" firstAttribute="leading" secondItem="wuC-Ue-DDH" secondAttribute="leading" id="cXO-tO-dGS"/>
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="JEB-Tj-ZPj">
-                                                <rect key="frame" x="0.0" y="957" width="640" height="150"/>
+                                                <rect key="frame" x="0.0" y="877" width="640" height="150"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2GM-6k-UDj">
                                                         <rect key="frame" x="0.0" y="0.0" width="320" height="150"/>
@@ -535,7 +543,7 @@
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="z4x-th-Rdk">
-                                                <rect key="frame" x="0.0" y="1107" width="640" height="150"/>
+                                                <rect key="frame" x="0.0" y="1027" width="640" height="150"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Custom Design" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gYO-Gy-Sdo">
                                                         <rect key="frame" x="0.0" y="0.0" width="320" height="150"/>
@@ -578,7 +586,7 @@
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="0fB-Ru-esM">
-                                                <rect key="frame" x="0.0" y="1264" width="640" height="100"/>
+                                                <rect key="frame" x="0.0" y="1184" width="640" height="100"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Story Group List Styling" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="thb-28-A0j">
                                                         <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
@@ -685,6 +693,7 @@
                     </view>
                     <size key="freeformSize" width="640" height="3000"/>
                     <connections>
+                        <outlet property="borderColorField" destination="kfQ-ec-vUa" id="qI5-YV-hEo"/>
                         <outlet property="colorField" destination="ph2-x3-1B4" id="sNB-DR-zJa"/>
                         <outlet property="colorShowcase" destination="xs4-9r-w6u" id="ihI-wf-pnF"/>
                         <outlet property="containerToCustom" destination="4ta-sG-SRx" id="Nao-4Q-FIv"/>
@@ -703,7 +712,6 @@
                         <outlet property="seenColorView" destination="vxZ-sa-kJ3" id="Mj2-Pd-tDu"/>
                         <outlet property="seenColorsLabel" destination="xB1-3O-4Cs" id="i8m-Fd-zx3"/>
                         <outlet property="smallButton" destination="Z7b-pI-tlI" id="BPj-3q-KWN"/>
-                        <outlet property="stateColorPicker" destination="8No-33-tdW" id="W7O-gR-qqq"/>
                         <outlet property="stylesAndColors" destination="VN2-i0-Vtj" id="6gt-5j-hFX"/>
                         <outlet property="textVisibleButton" destination="Psa-V5-0oU" id="APj-ao-fsS"/>
                         <outlet property="viewsContainer" destination="nnG-9M-frG" id="h2d-UR-GyR"/>
