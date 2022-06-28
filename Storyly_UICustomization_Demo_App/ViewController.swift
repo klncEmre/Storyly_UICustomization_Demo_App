@@ -198,14 +198,14 @@ class ViewController: UIViewController {
     
     @IBAction func seenAddButton(_ sender: Any) {
         if(!availableIndexesSeen.isEmpty){
-            let myStak = UIView()
-            myStak.translatesAutoresizingMaskIntoConstraints = false
+            let myStack = UIView() // will be convertted to stack
+            myStack.translatesAutoresizingMaskIntoConstraints = false
 
-            seenColorView.addSubview(myStak)
-            myStak.widthAnchor.constraint(equalToConstant: CGFloat(widthOfStack)).isActive = true
-            myStak.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
-            myStak.leftAnchor.constraint(equalTo: seenColorsLabel.rightAnchor , constant: CGFloat((Double(widthOfStack * (availableIndexesSeen[0] - 1)) / 2.0) * 1.1)).isActive = true
-            myStak.centerYAnchor.constraint(equalTo: seenColorsLabel.centerYAnchor).isActive = true
+            seenColorView.addSubview(myStack)
+            myStack.widthAnchor.constraint(equalToConstant: CGFloat(widthOfStack)).isActive = true
+            myStack.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
+            myStack.leftAnchor.constraint(equalTo: seenColorsLabel.rightAnchor , constant: CGFloat((Double(widthOfStack * (availableIndexesSeen[0] - 1)) / 2.0) * 1.1)).isActive = true
+            myStack.centerYAnchor.constraint(equalTo: seenColorsLabel.centerYAnchor).isActive = true
         
             let button = UIButton()
             button.tag = availableIndexesSeen[0]
@@ -221,17 +221,17 @@ class ViewController: UIViewController {
                 label.font = UIFont.systemFont(ofSize: 12)
                 return label
             }()
-            myStak.layer.cornerRadius = 8
-            myStak.backgroundColor = UIColor.lightGray.withAlphaComponent(0.4)
-            myStak.addSubview(button)
-            myStak.addSubview(myLabel)
+            myStack.layer.cornerRadius = 8
+            myStack.backgroundColor = UIColor.lightGray.withAlphaComponent(0.4)
+            myStack.addSubview(button)
+            myStack.addSubview(myLabel)
             button.widthAnchor.constraint(equalToConstant: CGFloat(Double(widthOfStack) * 0.4)).isActive = true
             button.heightAnchor.constraint(equalToConstant: CGFloat(20)).isActive = true
-            button.centerYAnchor.constraint(equalTo: myStak.centerYAnchor).isActive = true
-            button.rightAnchor.constraint(equalTo: myStak.rightAnchor,constant: CGFloat(-3)).isActive = true
+            button.centerYAnchor.constraint(equalTo: myStack.centerYAnchor).isActive = true
+            button.rightAnchor.constraint(equalTo: myStack.rightAnchor,constant: CGFloat(-3)).isActive = true
             myLabel.translatesAutoresizingMaskIntoConstraints = false
-            myLabel.leftAnchor.constraint(equalTo: myStak.leftAnchor,constant: CGFloat(2)).isActive = true
-            myLabel.centerYAnchor.constraint(equalTo: myStak.centerYAnchor).isActive = true
+            myLabel.leftAnchor.constraint(equalTo: myStack.leftAnchor,constant: CGFloat(2)).isActive = true
+            myLabel.centerYAnchor.constraint(equalTo: myStack.centerYAnchor).isActive = true
             
             
             colorsOfSeenState[availableIndexesSeen[0]] = UIColor.init(red: CGFloat(rgbValuesOfSeenState[0])/255, green: CGFloat(rgbValuesOfSeenState[1])/255, blue: CGFloat(rgbValuesOfSeenState[2])/255, alpha: 1.0)
@@ -625,5 +625,28 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         }
         
     
+    }
+}
+
+//:- Extension for UIImage for hex values
+
+
+extension UIColor {
+    convenience init(hexString: String) {
+        let hex = hexString.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int = UInt64()
+        Scanner(string: hex).scanHexInt64(&int)
+        let a, r, g, b: UInt64
+        switch hex.count {
+        case 3: // RGB (12-bit)
+            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+        case 6: // RGB (24-bit)
+            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
+        case 8: // ARGB (32-bit)
+            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+        default:
+            (a, r, g, b) = (255, 0, 0, 0)
+        }
+        self.init(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha: CGFloat(a) / 255)
     }
 }
