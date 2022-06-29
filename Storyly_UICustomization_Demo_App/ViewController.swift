@@ -380,31 +380,14 @@ class ViewController: UIViewController {
     @IBAction func applyListStyling(_ sender: Any) {
         edgePadValue = Int(edgePadding.text ?? "12") ?? 10
         padBetweenItemsValue = Int(paddingBetweenItems.text ?? "12") ?? 10
-        customizedView.removeFromSuperview()
-        customizedView = StorylyView()
-        customizedView.storylyInit = StorylyInit(storylyId: STORYLY_INSTANCE_TOKEN)
-        customizedView.storyGroupSize = pickedSize
-        if(pickedSize == "custom"){
-            customizedView.storyGroupIconStyling = StoryGroupIconStyling(height: CGFloat(height), width: CGFloat(width), cornerRadius: CGFloat(cRadius))
-        }
-        customizedView.rootViewController = self
-        customizedView.delegate = self
-        customizedView.storyGroupListStyling = StoryGroupListStyling(edgePadding: CGFloat(edgePadValue), paddingBetweenItems: CGFloat(padBetweenItemsValue))
         bringBackOldProperties()
-        containerToCustom.addSubview(customizedView)
-        customizedView.translatesAutoresizingMaskIntoConstraints = false
-        customizedView.heightAnchor.constraint(equalTo: containerToCustom.heightAnchor).isActive = true
-        customizedView.widthAnchor.constraint(equalTo: containerToCustom.widthAnchor).isActive = true
-        customizedView.centerXAnchor.constraint(equalTo: containerToCustom.centerXAnchor).isActive = true
-        customizedView.centerYAnchor.constraint(equalTo: containerToCustom.centerYAnchor).isActive = true
     }
     
 }
-
+//-
 extension ViewController: StorylyDelegate{
     
 }
-
 extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         if(pickerView == fontPicker){
@@ -434,7 +417,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
             }
         }
         else if(component == 1 && pickerView == fontPicker) {
-            return 12
+            return 50
         }
         return 1
     }
@@ -486,9 +469,17 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
             }
         }
         else if(pickerView == fontPicker && component == 1){
+            var refreshBar = false
+            if((row + 1) > fontSize){
+                refreshBar = true
+            }
             fontSize = row + 1
             font = font.withSize(CGFloat(fontSize))
             self.customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible: self.storyGroupTextIsVisible, color:UIColor(hexString: currentColor ?? "#000000"), font: self.font, lines: self.lineNumber)
+            if(refreshBar){
+                bringBackOldProperties()
+                
+            }
         }
     }
 
