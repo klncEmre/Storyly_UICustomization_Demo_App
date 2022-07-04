@@ -7,6 +7,7 @@
 
 import UIKit
 import Storyly
+
 class ViewController: UIViewController {
     
 //    DEFAULT PICKER VIEW VALUES NEED TO BE UPDATED TO DEFAULT OF STORYLY.
@@ -67,6 +68,12 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        /*
+         reset button and viewDidLoad have similar view setup
+         can create method as: setupViews() and include view setup there to reduce redundancy and clearity
+         */
+        
         //default
         defaultView.storylyInit = StorylyInit(storylyId: STORYLY_INSTANCE_TOKEN)
         defaultView.rootViewController = self
@@ -98,6 +105,22 @@ class ViewController: UIViewController {
         colorField.tag = 0
         customDesignView.isUserInteractionEnabled = false
 //        Seen and not Seen border color system
+        /*
+            - stack is reinitializing unnecessary => for resetting added seen/notseen views can remove subviews from stacks
+                - example:
+                    seenStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
+                        
+            - if you want to use programmatic approach can add different programmatic views with lazy to minize time on first load and to create views when needed
+                https://docs.swift.org/swift-book/LanguageGuide/Properties.html => Lazy Stored Properties section
+                - example:
+                 private lazy var seenStack = {
+                     let _seenStack = UIStackView()
+                     _seenStack.translatesAutoresizingMaskIntoConstraints = false
+                     _seenStack.spacing = CGFloat(10)
+                     return _seenStack
+                 }
+                            
+         */
         seenColorView.addSubview(seenStack)
         notSeenColorView.addSubview(notSeenStack)
         seenStack.translatesAutoresizingMaskIntoConstraints = false
@@ -112,6 +135,9 @@ class ViewController: UIViewController {
     
     @IBAction func resetButtonAction(_ sender: Any) {
         
+        /*
+            default value set and view reseting can be seperated into multiple methods for clearity
+         */
         lineNumber = 2
         fontSize = 12
         fontPicker.selectRow(11, inComponent: 1, animated: true)
@@ -144,6 +170,11 @@ class ViewController: UIViewController {
         edgePadValue = 20 //needs to be updated with default values
         padBetweenItemsValue = 20
         storyGroupTextIsVisible = true
+        /*
+             re-used UIImage's can be used from properties
+                example:
+                private lazy let icon = UIImage(systemName: "circle.inset.filled",withConfiguration: UIImage.SymbolConfiguration(scale: .large)
+         */
         textVisibleButton.setImage(UIImage(systemName: "circle.inset.filled",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.tintColor), for: UIControl.State.normal)
         pickedSize = "large"
         customizedView.removeFromSuperview()
@@ -203,6 +234,16 @@ class ViewController: UIViewController {
         
         
     }
+    
+    /*
+     - using nested stack -> stack -> button with notSeen/seen color can be reduced to stack (colors container) -> button (color)
+        - for performance and simplicity
+     - rather than using availableIndexesNotSeen and color button tags, from stack can access to button views (color) to simplify
+        to access and check which button clicked in buttonActionForStateColors method
+            find index of the subview button with checking is sender equal to color from stack
+                => use that index to remove from colorsOfNotSeenSate/colorsOfSeenSate
+     */
+    
     @IBAction func notSeenAddButton(_ sender: Any) {
         if(availableIndexesNotSeen.isEmpty){
             return
@@ -488,7 +529,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         
         switch pickerView{
             case stylesAndColors:
-                return w 
+                return w
             
             case fontPicker:
                 return w/2
