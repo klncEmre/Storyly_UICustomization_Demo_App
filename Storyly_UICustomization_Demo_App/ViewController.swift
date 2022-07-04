@@ -126,18 +126,8 @@ class ViewController: UIViewController {
         colorsOfNotSeenSate = [:]
         availableIndexesNotSeen = [0,2,4,6,8]
         availableIndexesSeen = [1,3,5,7,9]
-        seenStack.removeFromSuperview()
-        notSeenStack.removeFromSuperview()
-        seenStack = UIStackView()
-        notSeenStack = UIStackView()
-        seenColorView.addSubview(seenStack)
-        notSeenColorView.addSubview(notSeenStack)
-        seenStack.translatesAutoresizingMaskIntoConstraints = false
-        seenStack.leftAnchor.constraint(equalTo: seenColorsLabel.rightAnchor,constant: CGFloat(10)).isActive = true
-        seenStack.spacing = CGFloat(10)
-        notSeenStack.translatesAutoresizingMaskIntoConstraints = false
-        notSeenStack.leftAnchor.constraint(equalTo: notSeenColorsLabel.rightAnchor,constant: CGFloat(10)).isActive = true
-        notSeenStack.spacing = CGFloat(10)
+        seenStack.arrangedSubviews.forEach{$0.removeFromSuperview()}
+        notSeenStack.arrangedSubviews.forEach{$0.removeFromSuperview()}
         height = 12
         width = 12
         cRadius = 10
@@ -207,12 +197,7 @@ class ViewController: UIViewController {
         if(availableIndexesNotSeen.isEmpty){
             return
         }
-        let myStack = UIStackView() // will be convertted to stack
-        myStack.translatesAutoresizingMaskIntoConstraints = false
-        notSeenStack.addArrangedSubview(myStack)
-        myStack.widthAnchor.constraint(equalToConstant: CGFloat(widthOfStack)).isActive = true
-        myStack.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
-        myStack.centerYAnchor.constraint(equalTo: notSeenColorsLabel.centerYAnchor).isActive = true
+       
         let button = UIButton()
         button.tag = availableIndexesNotSeen[0]
         availableIndexesNotSeen.remove(at: 0)
@@ -224,11 +209,9 @@ class ViewController: UIViewController {
         button.setTitle(borderColorField.text ?? "#FFFFFF", for: UIControl.State.normal)
         button.titleLabel?.font = .systemFont(ofSize: 10)
         button.backgroundColor = UIColor(hexString: borderColorField.text ?? "#FFFFFF")
-        myStack.addSubview(button)
+        notSeenStack.addArrangedSubview(button)
         button.widthAnchor.constraint(equalToConstant: CGFloat(widthOfStack)).isActive = true
         button.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
-        button.centerYAnchor.constraint(equalTo: myStack.centerYAnchor).isActive = true
-        button.rightAnchor.constraint(equalTo: myStack.rightAnchor,constant: CGFloat(-3)).isActive = true
         button.layer.cornerRadius = 8
         let v = Array(colorsOfNotSeenSate.values)
         customizedView.storyGroupIconBorderColorNotSeen = v
@@ -239,13 +222,6 @@ class ViewController: UIViewController {
         if(availableIndexesSeen.isEmpty){
             return
         }
-        let myStack = UIStackView() // will be convertted to stack
-        myStack.translatesAutoresizingMaskIntoConstraints = false
-        seenStack.addArrangedSubview(myStack)
-        myStack.widthAnchor.constraint(equalToConstant: CGFloat(widthOfStack)).isActive = true
-        myStack.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
-        myStack.centerYAnchor.constraint(equalTo: seenColorsLabel.centerYAnchor).isActive = true
-    
         let button = UIButton()
         button.tag = availableIndexesSeen[0]
         availableIndexesSeen.remove(at: 0)
@@ -257,11 +233,9 @@ class ViewController: UIViewController {
         button.setTitle(borderColorField.text ?? "#FFFFFF", for: UIControl.State.normal)
         button.titleLabel?.font = .systemFont(ofSize: 10)
         button.backgroundColor = UIColor(hexString: borderColorField.text ?? "#FFFFFF")
-        myStack.addSubview(button)
+        seenStack.addArrangedSubview(button)
         button.widthAnchor.constraint(equalToConstant: CGFloat(widthOfStack)).isActive = true
         button.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
-        button.centerYAnchor.constraint(equalTo: myStack.centerYAnchor).isActive = true
-        button.rightAnchor.constraint(equalTo: myStack.rightAnchor,constant: CGFloat(-3)).isActive = true
         button.layer.cornerRadius = 8
         let v = Array(colorsOfSeenState.values)
         customizedView.storyGroupIconBorderColorSeen = v
