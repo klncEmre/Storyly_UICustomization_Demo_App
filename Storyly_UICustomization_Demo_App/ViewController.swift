@@ -194,68 +194,51 @@ class ViewController: UIViewController {
         
     }
     @IBAction func notSeenAddButton(_ sender: Any) {
-        if(availableIndexesNotSeen.isEmpty){
-            return
-        }
-       
-        let button = UIButton()
-        button.tag = availableIndexesNotSeen[0]
-        availableIndexesNotSeen.remove(at: 0)
-        colorsOfNotSeenSate[button.tag] = UIColor(hexString: borderColorField.text ?? "#FFFFFF")
-        
-        //index for removing the color
-        button.addTarget(self, action: #selector(buttonActionForStateColors), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(borderColorField.text ?? "#FFFFFF", for: UIControl.State.normal)
-        button.titleLabel?.font = .systemFont(ofSize: 10)
-        button.backgroundColor = UIColor(hexString: borderColorField.text ?? "#FFFFFF")
-        notSeenStack.addArrangedSubview(button)
-        button.widthAnchor.constraint(equalToConstant: CGFloat(widthOfStack)).isActive = true
-        button.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
-        button.layer.cornerRadius = 8
-        let v = Array(colorsOfNotSeenSate.values)
-        customizedView.storyGroupIconBorderColorNotSeen = v
-        
+       addButtonToStack(stackToAdd: notSeenStack)
     }
     
     @IBAction func seenAddButton(_ sender: Any) {
-        if(availableIndexesSeen.isEmpty){
-            return
-        }
-        let button = UIButton()
-        button.tag = availableIndexesSeen[0]
-        availableIndexesSeen.remove(at: 0)
-        colorsOfSeenState[button.tag] = UIColor(hexString: borderColorField.text ?? "#FFFFFF")
+        addButtonToStack(stackToAdd: seenStack)
         
+    }
+    
+    func addButtonToStack(stackToAdd:UIStackView){
+        let button = UIButton()
         button.addTarget(self, action: #selector(buttonActionForStateColors), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
-        
         button.setTitle(borderColorField.text ?? "#FFFFFF", for: UIControl.State.normal)
         button.titleLabel?.font = .systemFont(ofSize: 10)
         button.backgroundColor = UIColor(hexString: borderColorField.text ?? "#FFFFFF")
-        seenStack.addArrangedSubview(button)
+        stackToAdd.addArrangedSubview(button)
         button.widthAnchor.constraint(equalToConstant: CGFloat(widthOfStack)).isActive = true
         button.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
         button.layer.cornerRadius = 8
-        let v = Array(colorsOfSeenState.values)
-        customizedView.storyGroupIconBorderColorSeen = v
+        var colorsToUse : [UIColor] = []
+        stackToAdd.arrangedSubviews.forEach { colorsToUse.append($0.backgroundColor!) }
+        if(stackToAdd == seenStack){
+            customizedView.storyGroupIconBorderColorSeen = colorsToUse
+        }
+        else {
+            customizedView.storyGroupIconBorderColorNotSeen = colorsToUse
+        }
+        
     }
     
+    
     @objc func buttonActionForStateColors(_ sender: UIButton){
-        
-        sender.superview?.removeFromSuperview()
-        let keysNotSeen = Array(colorsOfNotSeenSate.keys)
-        if(keysNotSeen.contains(sender.tag)){//it means func called from notSeenState button
-            colorsOfNotSeenSate.removeValue(forKey: sender.tag)
-            let v = Array(colorsOfNotSeenSate.values)
-            customizedView.storyGroupIconBorderColorNotSeen = v
-            availableIndexesNotSeen.append(sender.tag)
+        if(sender.superview! == seenStack){
+            sender.removeFromSuperview()
+            var colorsOfSeen : [UIColor] = []
+            seenStack.arrangedSubviews.forEach { colorsOfSeen.append($0.backgroundColor!) }
+            customizedView.storyGroupIconBorderColorSeen = colorsOfSeen
+            
         }
         else{
-            colorsOfSeenState.removeValue(forKey: sender.tag)
-            let v = Array(colorsOfSeenState.values)
-            customizedView.storyGroupIconBorderColorSeen = v
-            availableIndexesSeen.append(sender.tag)
+            sender.removeFromSuperview()
+            var colorsOfNotSeen : [UIColor] = []
+            notSeenStack.arrangedSubviews.forEach {colorsOfNotSeen.append($0.backgroundColor!) }
+            customizedView.storyGroupIconBorderColorNotSeen = colorsOfNotSeen
+            
         }
         
     }
@@ -518,4 +501,12 @@ extension ViewController: UITextFieldDelegate{
         return true
     }
 }
+
+
+
+
+//MARK: - TO DO
+//seperate property and constraint set
+//reset button and viewdidload kinda do same thing, merge them into a function
+//use button indexes at stack to remove them. DONE
 
