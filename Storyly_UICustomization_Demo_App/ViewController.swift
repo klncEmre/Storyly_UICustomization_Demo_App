@@ -19,7 +19,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var textVisibleButton: UIButton!
     @IBOutlet weak var fontPicker: UIPickerView!
     @IBOutlet weak var lineNumberPicker: UIPickerView!
-    let groupTextFontDict: [String:UIFont] = ["System Font": UIFont.systemFont(ofSize: 12),"Bold System Font" : UIFont.boldSystemFont(ofSize: 12)]
+    let fontNames = ["System Font","Bold System Font"]
+    let fonts = [UIFont.systemFont(ofSize: 12),UIFont.boldSystemFont(ofSize: 12)]
     var lineNumber = 2
     var fontSize = 12
     var font = UIFont.systemFont(ofSize: CGFloat(12))
@@ -50,7 +51,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var borderColorField: UITextField!
     let widthOfStack = 60
     var frontItem = "x"
-    var pickedSize = "large"
 //    Story Group Size element
     @IBOutlet weak var smallButton: UIButton!
     @IBOutlet weak var largeButton: UIButton!
@@ -71,7 +71,10 @@ class ViewController: UIViewController {
 //    icon images for selections.
     let filledCircle = UIImage(systemName: "circle.inset.filled",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.tintColor)
     let emptyCircle = UIImage(systemName: "circle",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black)
-    
+    enum sizePicked { //size to determine size of storyly bar.
+        case small,large,custom
+    }
+    var pickedSize = sizePicked.large //default
     override func viewDidLoad() {
         super.viewDidLoad()
         //default
@@ -128,7 +131,6 @@ class ViewController: UIViewController {
         edgePadValue = 20 //needs to be updated with default values
         padBetweenItemsValue = 20
         storyGroupTextIsVisible = true
-        
     }
     func resetAndSetCustomizedView(){
         seenStack.arrangedSubviews.forEach{$0.removeFromSuperview()}
@@ -152,7 +154,7 @@ class ViewController: UIViewController {
     @IBAction func textVisibilityChange(_ sender: Any) {
         if(storyGroupTextIsVisible){
             storyGroupTextIsVisible = false
-            textVisibleButton.setImage(UIImage(systemName: "circle",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.tintColor), for: UIControl.State.normal)
+            textVisibleButton.setImage(emptyCircle, for: UIControl.State.normal)
         }
         else{
             storyGroupTextIsVisible = true
@@ -242,62 +244,64 @@ class ViewController: UIViewController {
         
     }
 //    Story Group Size functions
-    @IBAction func convertToSmall(_ sender: Any) {
-        
-        smallButton.setImage(filledCircle, for: UIControl.State.normal)
-        if(pickedSize == "custom"){
+    
+    func changeTheSize(pickedOne:sizePicked){
+        switch pickedOne{
+        case sizePicked.small:
+            smallButton.setImage(filledCircle, for: UIControl.State.normal)
             customButton.setImage(emptyCircle, for: UIControl.State.normal)
-            pickedSize = "small"
-            bringBackOldProperties()
-        }
-        else if(pickedSize == "large"){
             largeButton.setImage(emptyCircle, for: UIControl.State.normal)
-            pickedSize = "small"
-            bringBackOldProperties()
+            customDesignView.isUserInteractionEnabled = false
+        case sizePicked.large:
+            largeButton.setImage(filledCircle, for: UIControl.State.normal)
+            smallButton.setImage(emptyCircle, for: UIControl.State.normal)
+            customButton.setImage(emptyCircle, for: UIControl.State.normal)
+            customDesignView.isUserInteractionEnabled = false
+        case sizePicked.custom:
+            customButton.setImage(filledCircle, for: UIControl.State.normal)
+            smallButton.setImage(emptyCircle, for: UIControl.State.normal)
+            largeButton.setImage(emptyCircle, for: UIControl.State.normal)
+            customDesignView.isUserInteractionEnabled = true
         }
-        customDesignView.isUserInteractionEnabled = false
+        bringBackOldProperties()
+    }
+        
+    @IBAction func convertToSmall(_ sender: Any) {
+        pickedSize =  sizePicked.small
+        changeTheSize(pickedOne: sizePicked.small)
+        
     }
     @IBAction func convertToLarge(_ sender: Any) {
-        largeButton.setImage(filledCircle, for: UIControl.State.normal)
-        if(pickedSize == "custom"){
-            customButton.setImage(emptyCircle, for: UIControl.State.normal)
-            pickedSize = "large"
-            bringBackOldProperties()
-        }
-        else if(pickedSize == "small"){
-            smallButton.setImage(emptyCircle, for: UIControl.State.normal)
-            pickedSize = "large"
-            bringBackOldProperties()
-        }
-        customDesignView.isUserInteractionEnabled = false
+        pickedSize = sizePicked.large
+        changeTheSize(pickedOne: sizePicked.large)
+        
     }
     @IBAction func converToCustom(_ sender: Any) {
-        customButton.setImage(filledCircle, for: UIControl.State.normal)
-        if(pickedSize == "small"){
-            smallButton.setImage(emptyCircle, for: UIControl.State.normal)
-        }
-        else{
-            largeButton.setImage(emptyCircle, for: UIControl.State.normal)
-        }
-        pickedSize = "custom"
-        customDesignView.isUserInteractionEnabled = true
+        pickedSize = sizePicked.custom
+        changeTheSize(pickedOne: sizePicked.custom)
     }
-
 
     @IBAction func applyCustomSizes(_ sender: Any) {
 //      12 needs to be changed to default values of storyly
-        if(pickedSize == "custom"){
+        if(pickedSize == sizePicked.custom){
             bringBackOldProperties()
             print("applied")
         }
     }
     func bringBackOldProperties()
     {
+        var sizeText = "large"
+        if(pickedSize == sizePicked.small){
+            sizeText = "small"
+        }
+        else if(pickedSize == sizePicked.custom){
+            sizeText = "custom"
+        }
         customizedView.removeFromSuperview()
         customizedView = StorylyView()
         customizedView.storylyInit = StorylyInit(storylyId: STORYLY_INSTANCE_TOKEN)
-        customizedView.storyGroupSize = pickedSize
-        if(pickedSize == "custom"){
+        customizedView.storyGroupSize = sizeText
+        if(pickedSize == sizePicked.custom){
             let h = Int(heightTextF.text ?? "12")
             let w = Int(widthTextF.text  ?? "12")
             let c = Int(cornerRadiusTextF.text  ?? "12")
@@ -367,7 +371,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         if(component == 0){
             switch pickerView{
             case fontPicker:
-                return self.groupTextFontDict.count
+                return self.fonts.count
             case lineNumberPicker:
                 return 5
             case stylesAndColors:
@@ -387,8 +391,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         if(component == 0) {
             switch pickerView{
                 case fontPicker:
-                    let key = Array(groupTextFontDict.keys)
-                    return key[row]
+                    return fontNames[row]
                 case lineNumberPicker:
                     return  (row+1).description
                 case stylesAndColors:
@@ -408,8 +411,8 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         if(component == 0){
             switch pickerView{
                 case fontPicker:
-                    let values = Array(groupTextFontDict.values)
-                    font = values[row]
+                    
+                    font = fonts[row]
                     self.customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible:  self.storyGroupTextIsVisible, color: UIColor(hexString: currentColor ?? "#000000"), font: self.font, lines: self.lineNumber)
                     break
                     
