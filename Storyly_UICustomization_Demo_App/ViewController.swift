@@ -26,8 +26,8 @@ class ViewController: UIViewController {
     var font = UIFont.systemFont(ofSize: CGFloat(12))
 //    STORY GROUP COLORS
     @IBOutlet weak var stylesAndColors: UIPickerView!
-    var defaultProperties = ["Background":"#FFF1F1F1","Pin Icon":"#FFF87825","Ivod Icon":"#FFC9287B","Text Color":"#000000", ]
-    var properties = ["Background":"#FFF1F1F1","Pin Icon":"#FFF87825","Ivod Icon":"#FFC9287B","Text Color":"#000000", ]
+    var defaultProperties = ["Background":"#FFF1F1F1","Pin Icon":"#bd3373","Ivod Icon":"#FFC9287B","Text Color":"#000000", ]
+    var properties = ["Background":"#FFF1F1F1","Pin Icon":"#bd3373","Ivod Icon":"#FFC9287B","Text Color":"#000000", ]
     var propertiesNames = ["Background","Pin Icon","Ivod Icon","Text Color"]
      //needs to be updated with default values
     var currentPropertyIndex = "Background" //change this to property name
