@@ -20,19 +20,13 @@
                             <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nnG-9M-frG">
                                 <rect key="frame" x="0.0" y="44" width="640" height="350"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PlS-hr-bJU" customClass="StorylyView">
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PlS-hr-bJU" customClass="StorylyView">
                                         <rect key="frame" x="0.0" y="0.0" width="640" height="120"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="120" id="fAJ-iS-LiS"/>
-                                        </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4ta-sG-SRx">
                                         <rect key="frame" x="0.0" y="130" width="640" height="140"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="120" id="Sy4-8p-Bab"/>
-                                        </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yXr-qp-V8U">
                                         <rect key="frame" x="286.5" y="303" width="67" height="31"/>
@@ -45,13 +39,13 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="350" id="1sg-52-oNw"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="250" id="1sg-52-oNw"/>
                                     <constraint firstItem="yXr-qp-V8U" firstAttribute="centerX" secondItem="nnG-9M-frG" secondAttribute="centerX" id="6BK-AZ-UHJ"/>
+                                    <constraint firstItem="yXr-qp-V8U" firstAttribute="top" secondItem="4ta-sG-SRx" secondAttribute="bottom" constant="33" id="Hdd-rK-nmt"/>
                                     <constraint firstItem="4ta-sG-SRx" firstAttribute="top" secondItem="PlS-hr-bJU" secondAttribute="bottom" constant="10" id="IFP-RZ-qpH"/>
                                     <constraint firstAttribute="trailing" secondItem="PlS-hr-bJU" secondAttribute="trailing" id="QIB-rQ-3Uz"/>
                                     <constraint firstItem="4ta-sG-SRx" firstAttribute="leading" secondItem="nnG-9M-frG" secondAttribute="leading" id="auV-7X-AKr"/>
                                     <constraint firstItem="PlS-hr-bJU" firstAttribute="top" secondItem="nnG-9M-frG" secondAttribute="top" id="gLB-5w-zsF"/>
-                                    <constraint firstAttribute="bottom" secondItem="yXr-qp-V8U" secondAttribute="bottom" constant="16" id="n7m-tO-mkm"/>
                                     <constraint firstAttribute="trailing" secondItem="4ta-sG-SRx" secondAttribute="trailing" id="nAY-Rz-ioK"/>
                                     <constraint firstItem="PlS-hr-bJU" firstAttribute="leading" secondItem="nnG-9M-frG" secondAttribute="leading" id="sbg-ub-9m0"/>
                                 </constraints>

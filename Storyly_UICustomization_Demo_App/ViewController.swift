@@ -88,7 +88,7 @@ class ViewController: UIViewController {
         //default
         defaultView.storylyInit = StorylyInit(storylyId: STORYLY_INSTANCE_TOKEN)
         defaultView.rootViewController = self
-        defaultView.delegate = self
+        
         //for customized parts
         resetAndSetCustomizedView()
         //Story Group Text Styling
@@ -152,7 +152,6 @@ class ViewController: UIViewController {
         customizedView = StorylyView()
         customizedView.storylyInit = StorylyInit(storylyId: STORYLY_INSTANCE_TOKEN)
         customizedView.rootViewController = self
-        customizedView.delegate = self
         containerToCustom.addSubview(customizedView)
         customizedView.translatesAutoresizingMaskIntoConstraints = false
         customizedView.heightAnchor.constraint(equalTo: containerToCustom.heightAnchor).isActive = true
@@ -240,7 +239,6 @@ class ViewController: UIViewController {
         else {
             customizedView.storyGroupIconBorderColorNotSeen = colorsToUse
         }
-        
     }
     
     @objc func buttonActionForStateColors(_ sender: UIButton){ //TO REMOVE A COLOR.
@@ -287,7 +285,7 @@ class ViewController: UIViewController {
         }
         bringBackOldProperties()
     }
-        
+    
     @IBAction func convertToSmall(_ sender: Any) {
         pickedSize =  sizePicked.small
         changeTheSize(pickedOne: sizePicked.small)
@@ -307,7 +305,6 @@ class ViewController: UIViewController {
 //      12 needs to be changed to default values of storyly
         if(pickedSize == sizePicked.custom){
             bringBackOldProperties()
-            print("applied")
         }
     }
     func bringBackOldProperties()
@@ -363,7 +360,6 @@ class ViewController: UIViewController {
         customizedView.storyGroupIconBorderColorNotSeen = colorsOfNotSeen
 //      CustomizedView's protocols settings.
         customizedView.rootViewController = self
-        customizedView.delegate = self
         containerToCustom.addSubview(customizedView)
         customizedView.translatesAutoresizingMaskIntoConstraints = false
         customizedView.heightAnchor.constraint(equalTo: containerToCustom.heightAnchor).isActive = true
@@ -380,9 +376,7 @@ class ViewController: UIViewController {
     
 }
 //-
-extension ViewController: StorylyDelegate{
-    
-}
+
 extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         if(pickerView == fontPicker){
@@ -454,7 +448,6 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
                 break
             case stylesAndColors:
                 currentPropertyIndex = propertiesNames[row]
-                print(currentPropertyIndex)
                 let currentValue = properties[currentPropertyIndex]
                 colorShowcase.backgroundColor = UIColor(hexString: currentValue ?? "#000000")
                 colorField.text = currentValue
@@ -538,3 +531,6 @@ extension ViewController: UITextFieldDelegate{
 //reset button and viewdidload kinda do same thing, merge them into a function DONE
 //use button indexes at stack to remove them. DONE
 //Also function to add button to stack with both button is implemented for clearity.
+//CUSTOM FONT
+//klavye ile ekran konumu değişikliği
+//errors in log about constraints -> Done
