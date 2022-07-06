@@ -136,8 +136,8 @@ class ViewController: UIViewController {
         height = 12
         width = 12
         cRadius = 10
-        edgePadValue = 0 //needs to be updated with default values
-        padBetweenItemsValue = 0
+        edgePadValue = 6 //needs to be updated with default values
+        padBetweenItemsValue = 8
         storyGroupTextIsVisible = true
     }
     func resetAndSetCustomizedView(){
@@ -159,6 +159,7 @@ class ViewController: UIViewController {
         customizedView.widthAnchor.constraint(equalTo: containerToCustom.widthAnchor).isActive = true
         customizedView.centerXAnchor.constraint(equalTo: containerToCustom.centerXAnchor).isActive = true
         customizedView.centerYAnchor.constraint(equalTo: containerToCustom.centerYAnchor).isActive = true
+        containerToCustom.bottomAnchor.constraint(equalTo: customizedView.bottomAnchor).isActive = true
     }
     
     @IBAction func textVisibilityChange(_ sender: Any) {
@@ -448,6 +449,8 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
             case lineNumberPicker:
                 lineNumber = row + 1
                 self.customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible: self.storyGroupTextIsVisible, color:UIColor(hexString: currentColor ?? "#000000"), font: self.font, lines: self.lineNumber)
+                bringBackOldProperties()
+                
                 break
             case stylesAndColors:
                 currentPropertyIndex = propertiesNames[row]
@@ -461,16 +464,11 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
             }
         }
         else if(pickerView == fontPicker && component == 1){
-            var refreshBar = false
-            if((row + 1) > fontSize){
-                refreshBar = true
-            }
             fontSize = row + 1
             font = font.withSize(CGFloat(fontSize))
             self.customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible: self.storyGroupTextIsVisible, color:UIColor(hexString: currentColor ?? "#000000"), font: self.font, lines: self.lineNumber)
-            if(refreshBar){
-                bringBackOldProperties()
-            }
+            bringBackOldProperties()
+            
         }
     }
 

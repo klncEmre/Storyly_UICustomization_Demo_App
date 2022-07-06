@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="640" height="3000"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nnG-9M-frG">
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nnG-9M-frG">
                                 <rect key="frame" x="0.0" y="44" width="640" height="350"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PlS-hr-bJU" customClass="StorylyView">
@@ -27,14 +27,14 @@
                                             <constraint firstAttribute="height" constant="120" id="fAJ-iS-LiS"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4ta-sG-SRx">
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4ta-sG-SRx">
                                         <rect key="frame" x="0.0" y="130" width="640" height="140"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="120" id="Sy4-8p-Bab"/>
                                         </constraints>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yXr-qp-V8U">
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yXr-qp-V8U">
                                         <rect key="frame" x="286.5" y="303" width="67" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="RESET"/>
@@ -49,7 +49,6 @@
                                     <constraint firstItem="yXr-qp-V8U" firstAttribute="centerX" secondItem="nnG-9M-frG" secondAttribute="centerX" id="6BK-AZ-UHJ"/>
                                     <constraint firstItem="4ta-sG-SRx" firstAttribute="top" secondItem="PlS-hr-bJU" secondAttribute="bottom" constant="10" id="IFP-RZ-qpH"/>
                                     <constraint firstAttribute="trailing" secondItem="PlS-hr-bJU" secondAttribute="trailing" id="QIB-rQ-3Uz"/>
-                                    <constraint firstAttribute="bottom" secondItem="4ta-sG-SRx" secondAttribute="bottom" constant="80" id="T4z-3O-rAK"/>
                                     <constraint firstItem="4ta-sG-SRx" firstAttribute="leading" secondItem="nnG-9M-frG" secondAttribute="leading" id="auV-7X-AKr"/>
                                     <constraint firstItem="PlS-hr-bJU" firstAttribute="top" secondItem="nnG-9M-frG" secondAttribute="top" id="gLB-5w-zsF"/>
                                     <constraint firstAttribute="bottom" secondItem="yXr-qp-V8U" secondAttribute="bottom" constant="16" id="n7m-tO-mkm"/>
@@ -57,7 +56,7 @@
                                     <constraint firstItem="PlS-hr-bJU" firstAttribute="leading" secondItem="nnG-9M-frG" secondAttribute="leading" id="sbg-ub-9m0"/>
                                 </constraints>
                             </view>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vma-qc-FD5">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vma-qc-FD5">
                                 <rect key="frame" x="0.0" y="394" width="640" height="2572"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2lr-Hb-GfP">
@@ -682,10 +681,10 @@
                         <constraints>
                             <constraint firstItem="vma-qc-FD5" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="0d9-5k-Vln"/>
                             <constraint firstItem="nnG-9M-frG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Dku-Mj-6wg"/>
+                            <constraint firstItem="vma-qc-FD5" firstAttribute="top" secondItem="4ta-sG-SRx" secondAttribute="bottom" constant="80" id="Dw1-qf-ZAB"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="vma-qc-FD5" secondAttribute="trailing" id="Fcu-Qf-ghC"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="vma-qc-FD5" secondAttribute="bottom" id="Ju4-jz-6SQ"/>
                             <constraint firstItem="nnG-9M-frG" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="KN3-H0-Qvu"/>
-                            <constraint firstItem="vma-qc-FD5" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="394" id="PIg-Ht-CiK"/>
                             <constraint firstItem="2lr-Hb-GfP" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="Wjb-6c-909"/>
                             <constraint firstItem="vma-qc-FD5" firstAttribute="top" secondItem="nnG-9M-frG" secondAttribute="bottom" id="i4u-ab-Hr2"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="nnG-9M-frG" secondAttribute="trailing" id="lvB-RK-xm9"/>
