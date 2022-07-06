@@ -200,16 +200,17 @@ class ViewController: UIViewController {
         
     }
     
-    func addButtonToStack(stackToAdd:UIStackView){
-        lazy var coloredButton: UIButton = {
-            let button = UIButton()
-            button.addTarget(self, action: #selector(buttonActionForStateColors), for: .touchUpInside)
-            button.setTitle(borderColorField.text ?? "#FFFFFF", for: UIControl.State.normal)
-            button.titleLabel?.font = .systemFont(ofSize: 10)
-            button.backgroundColor = UIColor(hexString: borderColorField.text ?? "#FFFFFF")
-            return button
-        }()
+    func createButton() -> UIButton {
+        let button = UIButton()
+        button.addTarget(self, action: #selector(buttonActionForStateColors), for: .touchUpInside)
+        button.setTitle(borderColorField.text ?? "#FFFFFF", for: UIControl.State.normal)
+        button.titleLabel?.font = .systemFont(ofSize: 10)
+        button.backgroundColor = UIColor(hexString: borderColorField.text ?? "#FFFFFF")
+        return button
+    }
     
+    func addButtonToStack(stackToAdd:UIStackView){
+        let coloredButton = createButton()
         stackToAdd.addArrangedSubview(coloredButton)
         coloredButton.translatesAutoresizingMaskIntoConstraints = false
         coloredButton.widthAnchor.constraint(equalToConstant: CGFloat(widthOfStack)).isActive = true
