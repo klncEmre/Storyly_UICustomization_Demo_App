@@ -26,7 +26,8 @@ class ViewController: UIViewController {
     var font = UIFont.systemFont(ofSize: CGFloat(12))
 //    STORY GROUP COLORS
     @IBOutlet weak var stylesAndColors: UIPickerView!
-    var properties = ["Background":"#000000","Pin Icon":"#000000","Ivod Icon":"#000000","Text Color":"#000000", ]
+    var defaultProperties = ["Background":"#FFF1F1F1","Pin Icon":"#FFF87825","Ivod Icon":"#FFC9287B","Text Color":"#000000", ]
+    var properties = ["Background":"#FFF1F1F1","Pin Icon":"#FFF87825","Ivod Icon":"#FFC9287B","Text Color":"#000000", ]
     var propertiesNames = ["Background","Pin Icon","Ivod Icon","Text Color"]
      //needs to be updated with default values
     var currentPropertyIndex = "Background" //change this to property name
@@ -49,6 +50,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var notSeenColorsLabel: UILabel!
     @IBOutlet weak var seenColorsLabel: UILabel!
     @IBOutlet weak var borderColorField: UITextField!
+    let defaultSeenStateColors = [UIColor(hexString: "#FFDBDBDB"),UIColor(hexString: "#FFDBDBDB")]
+    let defaultNotSeenStateColors = [UIColor(hexString: "#FFFED169"),UIColor(hexString: "#FFFA7C20"),UIColor(hexString: "#FFC9287B"),UIColor(hexString: "#FF962EC2"),UIColor(hexString: "#FFFED169")]
     let widthOfStack = 60
     var frontItem = "x"
 //    Story Group Size element
@@ -59,6 +62,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var widthTextF: UITextField!
     @IBOutlet weak var cornerRadiusTextF: UITextField!
     @IBOutlet weak var customDesignView: UIStackView!
+    
     //    NEEDS TO BE UPDATED WITH DEFAULT SIZES
     var height = 12
     var width = 12
@@ -66,14 +70,18 @@ class ViewController: UIViewController {
 //    Story Group List Styling
     @IBOutlet weak var edgePadding: UITextField!
     @IBOutlet weak var paddingBetweenItems: UITextField!
-    var edgePadValue = 20 //needs to be updated with default values
-    var padBetweenItemsValue = 20
+    var edgePadValue = 6 //needs to be updated with default values
+    var padBetweenItemsValue = 8
 //    icon images for selections.
     let filledCircle = UIImage(systemName: "circle.inset.filled",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.tintColor)
     let emptyCircle = UIImage(systemName: "circle",withConfiguration: UIImage.SymbolConfiguration(scale: .large))?.withTintColor(UIColor.black)
-    enum sizePicked { //size to determine size of storyly bar.
-        case small,large,custom
+
+    enum sizePicked:String { //size to determine size of storyly bar.
+        case small = "small"
+        case large = "large"
+        case custom = "custom"
     }
+    
     var pickedSize = sizePicked.large //default
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -123,13 +131,13 @@ class ViewController: UIViewController {
         stylesAndColors.selectRow(0, inComponent: 0, animated: true)
         lineNumberPicker.selectRow(1, inComponent: 0, animated: true)
         font = UIFont.systemFont(ofSize: CGFloat(12))
-        properties = ["Background":"#000000","Pin Icon":"#000000","Ivod Icon":"#000000","Text Color":"#000000"]
+        properties = defaultProperties
         currentPropertyIndex = "Background"
         height = 12
         width = 12
         cRadius = 10
-        edgePadValue = 20 //needs to be updated with default values
-        padBetweenItemsValue = 20
+        edgePadValue = 0 //needs to be updated with default values
+        padBetweenItemsValue = 0
         storyGroupTextIsVisible = true
     }
     func resetAndSetCustomizedView(){
@@ -137,7 +145,9 @@ class ViewController: UIViewController {
         notSeenStack.arrangedSubviews.forEach{$0.removeFromSuperview()}
         customDesignView.isUserInteractionEnabled = false
         textVisibleButton.setImage(filledCircle, for: UIControl.State.normal)
-        convertToLarge(largeButton!)
+        if let safeLargeButton = largeButton{
+            convertToLarge(safeLargeButton)
+        }
         customizedView.removeFromSuperview()
         customizedView = StorylyView()
         customizedView.storylyInit = StorylyInit(storylyId: STORYLY_INSTANCE_TOKEN)
@@ -217,7 +227,12 @@ class ViewController: UIViewController {
         coloredButton.heightAnchor.constraint(equalToConstant: CGFloat(30)).isActive = true
         coloredButton.layer.cornerRadius = 8
         var colorsToUse : [UIColor] = []
-        stackToAdd.arrangedSubviews.forEach { colorsToUse.append($0.backgroundColor!) }
+        stackToAdd.arrangedSubviews.forEach {
+            if let buttonBackgroundColor = $0.backgroundColor {
+                colorsToUse.append(buttonBackgroundColor)
+            }
+           
+        }
         if(stackToAdd == seenStack){
             customizedView.storyGroupIconBorderColorSeen = colorsToUse
         }
@@ -231,18 +246,23 @@ class ViewController: UIViewController {
         if(sender.superview! == seenStack){
             sender.removeFromSuperview()
             var colorsOfSeen : [UIColor] = []
-            seenStack.arrangedSubviews.forEach { colorsOfSeen.append($0.backgroundColor!) }
+            seenStack.arrangedSubviews.forEach {
+                if let buttonBackgroundColor = $0.backgroundColor{
+                    colorsOfSeen.append(buttonBackgroundColor)
+                }
+            }
             customizedView.storyGroupIconBorderColorSeen = colorsOfSeen
-            
         }
         else{
             sender.removeFromSuperview()
             var colorsOfNotSeen : [UIColor] = []
-            notSeenStack.arrangedSubviews.forEach {colorsOfNotSeen.append($0.backgroundColor!) }
+            notSeenStack.arrangedSubviews.forEach {
+                if let buttonBackgroundColor = $0.backgroundColor {
+                    colorsOfNotSeen.append(buttonBackgroundColor)
+                }
+            }
             customizedView.storyGroupIconBorderColorNotSeen = colorsOfNotSeen
-            
         }
-        
     }
 //    Story Group Size functions
     
@@ -291,17 +311,10 @@ class ViewController: UIViewController {
     }
     func bringBackOldProperties()
     {
-        var sizeText = "large"
-        if(pickedSize == sizePicked.small){
-            sizeText = "small"
-        }
-        else if(pickedSize == sizePicked.custom){
-            sizeText = "custom"
-        }
         customizedView.removeFromSuperview()
         customizedView = StorylyView()
         customizedView.storylyInit = StorylyInit(storylyId: STORYLY_INSTANCE_TOKEN)
-        customizedView.storyGroupSize = sizeText
+        customizedView.storyGroupSize = pickedSize.rawValue
         if(pickedSize == sizePicked.custom){
             let h = Int(heightTextF.text ?? "12")
             let w = Int(widthTextF.text  ?? "12")
@@ -311,27 +324,43 @@ class ViewController: UIViewController {
             cRadius = c ?? 10
             customizedView.storyGroupIconStyling = StoryGroupIconStyling(height: CGFloat(h ?? 40), width: CGFloat(w ?? 40), cornerRadius: CGFloat(c ?? 30))
         }
-        let currentValues = properties["Text Color"]
-        customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible: self.storyGroupTextIsVisible, color:UIColor(hexString: currentValues ?? "#000000"), font: self.font, lines: self.lineNumber)
         
-        let currentValues2 = properties["Ivod Icon"]
-        customizedView.storyGroupIVodIconColor = UIColor(hexString: currentValues2 ?? "#000000")
+        let textColorCustomizedColor = properties["Text Color"]
+        customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible: self.storyGroupTextIsVisible, color:UIColor(hexString: textColorCustomizedColor ?? "#000000"), font: self.font, lines: self.lineNumber)
         
-        let currentValues3 = properties["Pin Icon"]
-        customizedView.storyGroupPinIconColor = UIColor(hexString: currentValues3 ?? "#000000")
+        let ivodIconCustomizedColor = properties["Ivod Icon"]
+        customizedView.storyGroupIVodIconColor = UIColor(hexString: ivodIconCustomizedColor ?? "#000000")
         
-        let currentValues4 = properties["Background"]
-        customizedView.storyGroupIconBackgroundColor = UIColor(hexString: currentValues4 ?? "#000000")
+        let pinIconCustomizedColor = properties["Pin Icon"]
+        customizedView.storyGroupPinIconColor = UIColor(hexString: pinIconCustomizedColor ?? "#000000")
+        
+        let backgroundCustomizedColor = properties["Background"]
+        customizedView.storyGroupIconBackgroundColor = UIColor(hexString: backgroundCustomizedColor ?? "#000000")
         
         customizedView.storyGroupListStyling = StoryGroupListStyling(edgePadding: CGFloat(edgePadValue), paddingBetweenItems: CGFloat(padBetweenItemsValue))
+//        Colors of seen state
         var colorsOfSeen : [UIColor] = []
-        seenStack.arrangedSubviews.forEach { colorsOfSeen.append($0.backgroundColor!) }
+        seenStack.arrangedSubviews.forEach {
+            if let buttonBackgroundColor = $0.backgroundColor{
+                colorsOfSeen.append(buttonBackgroundColor)
+            }
+        }
+        if(colorsOfSeen.isEmpty) {
+            colorsOfSeen = defaultSeenStateColors
+        }
         customizedView.storyGroupIconBorderColorSeen = colorsOfSeen
-        customizedView.storyGroupIconBorderColorSeen = colorsOfSeen
+//        Colors of not seen state
         var colorsOfNotSeen : [UIColor] = []
-        notSeenStack.arrangedSubviews.forEach {colorsOfNotSeen.append($0.backgroundColor!) }
+        notSeenStack.arrangedSubviews.forEach {
+            if let buttonBackgroundColor = $0.backgroundColor {
+                colorsOfNotSeen.append(buttonBackgroundColor)
+            }
+        }
+        if(colorsOfNotSeen.isEmpty){
+            colorsOfNotSeen = defaultNotSeenStateColors
+        }
         customizedView.storyGroupIconBorderColorNotSeen = colorsOfNotSeen
-        customizedView.storyGroupIconBorderColorNotSeen = colorsOfNotSeen
+//      CustomizedView's protocols settings.
         customizedView.rootViewController = self
         customizedView.delegate = self
         containerToCustom.addSubview(customizedView)
@@ -411,8 +440,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         let currentColor = properties["Text Color"]
         if(component == 0){
             switch pickerView{
-                case fontPicker:
-                    
+            case fontPicker:
                     font = fonts[row]
                     self.customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible:  self.storyGroupTextIsVisible, color: UIColor(hexString: currentColor ?? "#000000"), font: self.font, lines: self.lineNumber)
                     break
@@ -442,7 +470,6 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
             self.customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible: self.storyGroupTextIsVisible, color:UIColor(hexString: currentColor ?? "#000000"), font: self.font, lines: self.lineNumber)
             if(refreshBar){
                 bringBackOldProperties()
-                
             }
         }
     }
