@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BC341E8D2876C779001D9868 /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = BC341E8B2876C779001D9868 /* OFL.txt */; };
+		BC341E8E2876C779001D9868 /* Lobster-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BC341E8C2876C779001D9868 /* Lobster-Regular.ttf */; };
 		BC981E762861B3FA006B2D2E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC981E752861B3FA006B2D2E /* AppDelegate.swift */; };
 		BC981E782861B3FA006B2D2E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC981E772861B3FA006B2D2E /* SceneDelegate.swift */; };
 		BC981E7A2861B3FA006B2D2E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC981E792861B3FA006B2D2E /* ViewController.swift */; };
@@ -17,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BC341E8B2876C779001D9868 /* OFL.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
+		BC341E8C2876C779001D9868 /* Lobster-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lobster-Regular.ttf"; sourceTree = "<group>"; };
 		BC981E722861B3FA006B2D2E /* Storyly_UICustomization_Demo_App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Storyly_UICustomization_Demo_App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC981E752861B3FA006B2D2E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BC981E772861B3FA006B2D2E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -39,6 +43,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BC341E8A2876C779001D9868 /* Lobster */ = {
+			isa = PBXGroup;
+			children = (
+				BC341E8B2876C779001D9868 /* OFL.txt */,
+				BC341E8C2876C779001D9868 /* Lobster-Regular.ttf */,
+			);
+			path = Lobster;
+			sourceTree = "<group>";
+		};
 		BC981E692861B3FA006B2D2E = {
 			isa = PBXGroup;
 			children = (
@@ -65,6 +78,7 @@
 				BC981E7E2861B3FC006B2D2E /* Assets.xcassets */,
 				BC981E802861B3FC006B2D2E /* LaunchScreen.storyboard */,
 				BC981E832861B3FC006B2D2E /* Info.plist */,
+				BC341E8A2876C779001D9868 /* Lobster */,
 			);
 			path = Storyly_UICustomization_Demo_App;
 			sourceTree = "<group>";
@@ -133,8 +147,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC341E8E2876C779001D9868 /* Lobster-Regular.ttf in Resources */,
 				BC981E822861B3FC006B2D2E /* LaunchScreen.storyboard in Resources */,
 				BC981E7F2861B3FC006B2D2E /* Assets.xcassets in Resources */,
+				BC341E8D2876C779001D9868 /* OFL.txt in Resources */,
 				BC981E7D2861B3FA006B2D2E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

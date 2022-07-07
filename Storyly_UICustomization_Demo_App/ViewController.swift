@@ -21,8 +21,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var textVisibleButton: UIButton!
     @IBOutlet weak var fontPicker: UIPickerView!
     @IBOutlet weak var lineNumberPicker: UIPickerView!
-    let fontNames = ["System Font","Bold System Font"]
-    let fonts = [UIFont.systemFont(ofSize: 12),UIFont.boldSystemFont(ofSize: 12)]
+    let fontNames = ["System Font","Bold System Font","Lobster-Regular"]
+    let fonts = [UIFont.systemFont(ofSize: 12),UIFont.boldSystemFont(ofSize: 12),UIFont(name:"Lobster-Regular" , size: 12)]
     var lineNumber = 2
     var fontSize = 12
     var font = UIFont.systemFont(ofSize: CGFloat(12))
@@ -442,9 +442,12 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         if(component == 0){
             switch pickerView{
             case fontPicker:
-                    font = fonts[row]
+                if let safeFont = fonts[row] {
+                    font = safeFont.withSize(CGFloat(fontSize))
                     self.customizedView.storyGroupTextStyling =  StoryGroupTextStyling(isVisible:  self.storyGroupTextIsVisible, color: UIColor(hexString: currentColor ?? "#000000"), font: self.font, lines: self.lineNumber)
-                    break
+                }
+                
+                break
                     
             case lineNumberPicker:
                 lineNumber = row + 1
@@ -496,7 +499,7 @@ extension UIColor {
         Scanner(string: hex).scanHexInt64(&int)
         let a, r, g, b: UInt64
         switch hex.count {
-        case 3: // RGB (12-bit)
+        case 3: // RGB (12-bit)/Users/emrekilinc/Downloads/Lobster
             (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
         case 6: // RGB (24-bit)
             (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
@@ -550,7 +553,6 @@ extension ViewController{
                 self.keyboardWillHide(notification: notification)
             }
     }
-    
     func keyboardWillShow(notification: Notification) {
             guard let userInfo = notification.userInfo,
                 let frame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
@@ -559,7 +561,6 @@ extension ViewController{
             let contentInset = UIEdgeInsets(top: 0, left: 0, bottom: frame.height, right: 0)
             scrollView?.contentInset = contentInset
     }
-        
     func keyboardWillHide(notification: Notification) {
         scrollView?.contentInset = UIEdgeInsets.zero
     }
@@ -572,7 +573,7 @@ extension ViewController{
 //seperate property and constraint set DONE
 //reset button and viewdidload kinda do same thing, merge them into a function DONE
 //use button indexes at stack to remove them. DONE
-//Also function to add button to stack with both button is implemented for clearity.
+//Also function to add button to stack with both button is implemented for clearity. DONE
 //CUSTOM FONT
-//klavye ile ekran konumu değişikliği
-//errors in log about constraints -> Done
+//Keyboard and textField location fix -> DONE
+//errors in log about constraints fix -> DONE
