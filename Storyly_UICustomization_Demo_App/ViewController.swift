@@ -14,6 +14,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var containerToCustom: UIView!
     var customizedView = StorylyView()
     let STORYLY_INSTANCE_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NfaWQiOjc2MCwiYXBwX2lkIjo0MDUsImluc19pZCI6NDA0fQ.1AkqOy_lsiownTBNhVOUKc91uc9fDcAxfQZtpm3nj40"
+    @IBOutlet weak var scrollView: UIScrollView!
+    
 //    Story Group Text Styling
     var storyGroupTextIsVisible = true
     @IBOutlet weak var textVisibleButton: UIButton!
@@ -82,6 +84,7 @@ class ViewController: UIViewController {
         case custom = "custom"
     }
     
+    
     var pickedSize = sizePicked.large //default
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -116,6 +119,9 @@ class ViewController: UIViewController {
 //      color input setting
         borderColorField.tag = 1
         borderColorField.delegate = self
+//          for keyboard dismiss when clicking another point on screen
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapView(gesture:)))
+        view.addGestureRecognizer(tapGesture)
     }
 
     @IBAction func resetButtonAction(_ sender: Any) { //To reset the customized view and its property picker etc.
@@ -506,15 +512,7 @@ extension UIColor {
 extension ViewController: UITextFieldDelegate{
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         
-            if let toCheck = textField.text{
-                if(toCheck.count == 7 && textField.tag == 0){
-                    return true
-                }
-                else if(toCheck.count == 7 && textField.tag == 1){
-                    return true
-                }
-            }
-        return false
+        return true
     }
     public func textFieldDidEndEditing(_ textField: UITextField) {
         if(textField == colorField){
@@ -525,6 +523,50 @@ extension ViewController: UITextFieldDelegate{
         textField.endEditing(true)
         return true
     }
+}
+//MARK: KEYBOARD RELATED FUNCTIONS
+extension ViewController{
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        addObservers()
+    }
+        
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        removeObservers()
+    }
+    @objc func didTapView(gesture:UITapGestureRecognizer){
+        self.view.endEditing(true)
+    }
+    func addObservers() {
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: nil) {
+                notification in
+                self.keyboardWillShow(notification: notification)
+            }
+            
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: nil) {
+                notification in
+                self.keyboardWillHide(notification: notification)
+            }
+    }
+    
+    func keyboardWillShow(notification: Notification) {
+            guard let userInfo = notification.userInfo,
+                let frame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+                    return
+            }
+            let contentInset = UIEdgeInsets(top: 0, left: 0, bottom: frame.height, right: 0)
+            scrollView?.contentInset = contentInset
+    }
+        
+    func keyboardWillHide(notification: Notification) {
+        scrollView?.contentInset = UIEdgeInsets.zero
+    }
+    func removeObservers() {
+            NotificationCenter.default.removeObserver(self)
+    }
+
 }
 //MARK: - TO DO
 //seperate property and constraint set DONE

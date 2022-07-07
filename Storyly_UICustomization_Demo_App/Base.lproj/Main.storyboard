@@ -702,6 +702,7 @@
                         <outlet property="notSeenColorView" destination="XpM-hp-Z0E" id="DJi-AA-TBS"/>
                         <outlet property="notSeenColorsLabel" destination="rGn-Qe-rJU" id="kW1-EV-d9V"/>
                         <outlet property="paddingBetweenItems" destination="GNR-1t-SXt" id="FS3-o6-EZi"/>
+                        <outlet property="scrollView" destination="vma-qc-FD5" id="OgD-ML-OHh"/>
                         <outlet property="seenColorView" destination="vxZ-sa-kJ3" id="Mj2-Pd-tDu"/>
                         <outlet property="seenColorsLabel" destination="xB1-3O-4Cs" id="i8m-Fd-zx3"/>
                         <outlet property="smallButton" destination="Z7b-pI-tlI" id="BPj-3q-KWN"/>
