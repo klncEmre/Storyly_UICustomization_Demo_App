@@ -121,7 +121,7 @@ class ViewController: UIViewController {
         borderColorField.delegate = self
 //          for keyboard dismiss when clicking another point on screen
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapView(gesture:)))
-        view.addGestureRecognizer(tapGesture)
+        scrollView.addGestureRecognizer(tapGesture) // Can we add this tapGesture to view and also be able to click the stories?
     }
 
     @IBAction func resetButtonAction(_ sender: Any) { //To reset the customized view and its property picker etc.
