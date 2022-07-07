@@ -22,7 +22,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var fontPicker: UIPickerView!
     @IBOutlet weak var lineNumberPicker: UIPickerView!
     let fontNames = ["System Font","Bold System Font","Lobster-Regular"]
-    let fonts = [UIFont.systemFont(ofSize: 12),UIFont.boldSystemFont(ofSize: 12),UIFont(name:"Lobster-Regular" , size: 12)]
+    let fonts = [UIFont.systemFont(ofSize: 12),UIFont.boldSystemFont(ofSize: 12), UIFont.lobster(size: 12)]
     var lineNumber = 2
     var fontSize = 12
     var font = UIFont.systemFont(ofSize: CGFloat(12))
@@ -568,6 +568,14 @@ extension ViewController{
             NotificationCenter.default.removeObserver(self)
     }
 
+}
+
+//MARK: LOBSTER FONT ADDED TO UIFONT FOR EASY USAGE
+extension UIFont{
+    static func lobster(size:CGFloat) -> UIFont?{
+        return UIFont(name:"Lobster-Regular" , size: size)
+        
+    }
 }
 //MARK: - TO DO
 //seperate property and constraint set DONE
